@@ -1,20 +1,44 @@
 export const initialState = {
     isLoggedIn: false,
-    user: null,
+    me: null,
     signUpData: {},
     loginData: {},
 }
 
-export const loginAction = (data) => {
+export const loginRequestAction = (data) => {
     return {
-        type: 'LOG_IN',
+        type: 'LOG_IN_REQUEST',
+        data,
+    }
+};
+export const loginSuccessAction = (data) => {
+    return {
+        type: 'LOG_IN_SUCCESS',
+        data,
+    }
+};
+export const loginFailureAction = (data) => {
+    return {
+        type: 'LOG_IN_FAILURE',
         data,
     }
 };
 
-export const logoutAction = () => {
+export const logoutRequestAction = () => {
     return {
-        type: 'LOG_OUT',
+        type: 'LOG_OUT_REQUEST',
+    }
+};
+export const logoutSuccessAction = (data) => {
+    return {
+        type: 'LOG_OUT_SUCCESS',
+        data,
+    }
+};
+export const logoutFailureAction = (data) => {
+    return {
+        type: 'LOG_OUT_FAILURE',
+        data,
     }
 };
 
@@ -24,13 +48,13 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 isLoggedIn: true,
-                user: action.data,
+                me: action.data,
             }
         case 'LOG_OUT': 
             return {
                 ...state,
                 isLoggedIn: false,
-                user: null,
+                me: null,
             }
         default: 
             return state;
