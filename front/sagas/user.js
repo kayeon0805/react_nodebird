@@ -1,5 +1,10 @@
-import { all, fork, call, put, takeLatest, delay } from 'redux-saga/effects';
-import axios from 'axios';
+import axios from "axios";
+import { all, delay, fork, put, takeLatest } from "redux-saga/effects";
+import { 
+    LOG_IN_FAILURE, LOG_IN_REQUEST, LOG_IN_SUCCESS, 
+    LOG_OUT_FAILURE, LOG_OUT_REQUEST, LOG_OUT_SUCCESS, 
+    SIGN_UP_FAILURE, SIGN_UP_REQUEST, SIGN_UP_SUCCESS 
+} from "../reducers/user";
 
 // generator X
 function loginAPI(data) {
@@ -14,13 +19,13 @@ function* logIn(action) {
         yield delay(1000);
         // put => dispatch 같은 개념
         yield put({
-            type: "LOG_IN_SUCCESS",
-            // data: result.data,
+            type: LOG_IN_SUCCESS,
+            data: action.data,
         });
     } catch (err) {
         yield put({
-            type: "LOG_IN_FAILURE",
-            data: err.response.data,
+            type: LOG_IN_FAILURE,
+            error: err.response.data,
         })
     }
 }
@@ -34,54 +39,52 @@ function* logOut() {
         // const result = yield call(logoutAPI);
         yield delay(1000);
         yield put({
-            type: "LOG_OUT_SUCCESS",
+            type: LOG_OUT_SUCCESS,
         });
     } catch (err) {
         yield put({
-            type: "LOG_OUT_FAILURE",
-            data: err.response.data,
+            type: LOG_OUT_FAILURE,
+            error: err.response.data,
         })
     }
 }
 
-function addPostAPI(data) {
-    return axios.post('/api/post');
+function signUpAPI() {
+    return axios.post('/api/logout');
 }
 
-function* addPost(action) {
+function* signUp() {
     try {
-        // const result = yield call(addPostAPI, action.data);
+        // const result = yield call(logoutAPI);
         yield delay(1000);
         yield put({
-            type: "ADD_POST_SUCCESS",
-            // data: result.data,
+            type: SIGN_UP_SUCCESS,
         });
     } catch (err) {
         yield put({
-            type: "ADD_POST_FAILURE",
-            data: err.response.data,
+            type: SIGN_UP_FAILURE,
+            error: err.response.data,
         })
     }
 }
 
 function* watchLogin() {
     // LOG_IN_REQUEST가 실행될 때까지 기다리다가 실행되면 logIn을 실행한다.
-    yield takeLatest('LOG_IN_REQUEST', logIn);
+    yield takeLatest(LOG_IN_REQUEST, logIn);
 }
 
 function* watchLogOut() {
-    yield takeLatest('LOG_OUT_REQUEST', logOut);
+    yield takeLatest(LOG_OUT_REQUEST, logOut);
 }
 
-function* watchAddPost() {
-    yield takeLatest('ADD_POST_REQUEST', addPost);
+function* watchSignUp() {
+    yield takeLatest(SIGN_UP_REQUEST, signUp);
 }
 
-export default function* rootSaga() {
-    // all은 배열을 받고 fork는 실행한다(call도 가능) => 배열 안을 한 번에 실행한다.
+export default function* userSaga() {
     yield all([
         fork(watchLogin),
         fork(watchLogOut),
-        fork(watchAddPost),
+        fork(watchSignUp),
     ]);
 }
