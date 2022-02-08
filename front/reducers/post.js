@@ -1,13 +1,11 @@
 import shortId from 'shortid';
 import produce from 'immer';
 import faker from 'faker';
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 
 export const initialState = {
     mainPosts: [],
     imagePaths: [],
-    hasMorePost: true,
+    hasMorePosts: true,
     loadPostsLoading: false,
     loadPostsDone: false,
     loadPostsError: null,
@@ -57,13 +55,6 @@ export const REMOVE_POST_REQUEST = 'REMOVE_POST_REQUEST';
 export const REMOVE_POST_SUCCESS = 'REMOVE_POST_SUCCESS';
 export const REMOVE_POST_FAILURE = 'REMOVE_POST_FAILURE';
 
-const dispatch = useDispatch();
-useEffect(() => {
-    dispatch({
-        type: LOAD_POSTS_REQUEST,
-    });
-}, []);
-
 export const addPost = (data) => ({
     type: ADD_POST_REQUEST,
     data,
@@ -106,7 +97,7 @@ const reducer = (state = initialState, action) => {
                 draft.loadPostsLoading = false;
                 draft.loadPostsDone = true;
                 draft.mainPosts = action.data.concat(draft.mainPosts);
-                draft.hasMorePost = draft.mainPosts.length < 50;
+                draft.hasMorePosts = draft.mainPosts.length < 50;
                 break;
             case LOAD_POSTS_FAILURE:
                 draft.loadPostsLoading = false;
