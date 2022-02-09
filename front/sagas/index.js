@@ -1,10 +1,12 @@
 import { all, fork } from 'redux-saga/effects';
-
+import axios from 'axios';
 import postSaga from './post';
 import userSaga from './user';
 
+axios.defaults.baseURL = 'http://localhost:3065';
+axios.defaults.withCredentials = true;
+
 export default function* rootSaga() {
-    // all은 배열을 받고 fork는 실행한다(call도 가능) => 배열 안을 한 번에 실행한다.
     yield all([
         fork(postSaga),
         fork(userSaga),

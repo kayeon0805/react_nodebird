@@ -44,7 +44,9 @@ export const ImgWrapper = styled.div`
 
     & img {
         margin: 0 auto;
-        max-height: 550px;
+        width: 55%;
+        height: auto%;
+        object-fit: cover;
     }
 `;
 

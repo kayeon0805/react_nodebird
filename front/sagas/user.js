@@ -1,5 +1,5 @@
 import axios from "axios";
-import { all, delay, fork, put, takeLatest } from "redux-saga/effects";
+import { all, call, delay, fork, put, takeLatest } from "redux-saga/effects";
 import { 
     FOLLOW_FAILURE, FOLLOW_REQUEST, FOLLOW_SUCCESS,
     LOG_IN_FAILURE, LOG_IN_REQUEST, LOG_IN_SUCCESS, 
@@ -49,19 +49,18 @@ function* follow(action) {
 }
 
 function loginAPI(data) {
-    return axios.post('/api/login');
+    return axios.post('/user/login', data);
 }
 
 function* logIn(action) {
     // 요청이 실패할 경우를 대비해 try-catch로 감싼다.
     try {
         // loginAPI를 실행하고 리턴값을 받는다.
-        // const result = yield call(loginAPI, action.data);
-        yield delay(1000);
+        const result = yield call(loginAPI, action.data);
         // put => dispatch 같은 개념
         yield put({
             type: LOG_IN_SUCCESS,
-            data: action.data,
+            data: result.data,
         });
     } catch (err) {
         yield put({
@@ -72,13 +71,12 @@ function* logIn(action) {
 }
 
 function logoutAPI() {
-    return axios.post('/api/logout');
+    return axios.post('/user/logout');
 }
 
 function* logOut() {
     try {
-        // const result = yield call(logoutAPI);
-        yield delay(1000);
+        const result = yield call(logoutAPI);
         yield put({
             type: LOG_OUT_SUCCESS,
         });
@@ -90,14 +88,14 @@ function* logOut() {
     }
 }
 
-function signUpAPI() {
-    return axios.post('/api/logout');
+function signUpAPI(data) {
+    return axios.post('/user', data);
 }
 
-function* signUp() {
+function* signUp(action) {
     try {
-        // const result = yield call(logoutAPI);
-        yield delay(1000);
+        const result = yield call(signUpAPI, action.data);
+        console.log(result);
         yield put({
             type: SIGN_UP_SUCCESS,
         });

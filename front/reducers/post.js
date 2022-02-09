@@ -28,7 +28,7 @@ export const generateDummyPost = (number) => Array(number).fill().map((v, i) => 
     },
     content: faker.lorem.paragraph(),
     Images: [{
-      src: `https://picsum.photos/200/100?random=${i}`,
+      src: `https://picsum.photos/400/300?random=${i}`,
     }],
     Comments: [{
       User: {
@@ -65,26 +65,6 @@ export const addComment = (data) => ({
     data,
 });
 
-const dummyPost = (data) => ({
-    id: data.id,
-    content: data.content,
-    User: {
-        id: 1,
-        nickname: '가연',
-    },
-    Images: [],
-    Comments: [],
-});
-
-const dummyComment = (data) => ({
-    id: shortId.generate(),
-    content: data,
-    User: {
-        id: 1,
-        nickname: '가연',
-    },
-});
-
 const reducer = (state = initialState, action) => {
     return produce(state, (draft) => {
         switch (action.type) {
@@ -109,7 +89,7 @@ const reducer = (state = initialState, action) => {
                 draft.addPostError = null;
                 break;
             case ADD_POST_SUCCESS:
-                draft.mainPosts.unshift(dummyPost(action.data));
+                draft.mainPosts.unshift(action.data);
                 draft.addPostLoading = false;
                 draft.addPostDone = true;
                 break;
@@ -138,8 +118,8 @@ const reducer = (state = initialState, action) => {
                 break;
             case ADD_COMMENT_SUCCESS: {
                 // 댓글을 단 게시물을 찾음.
-                const post = draft.mainPosts.find((v) => v.id === action.data.postId);
-                post.Comments.unshift(dummyComment(action.data.content));
+                const post = draft.mainPosts.find((v) => v.id === action.data.PostId);
+                post.Comments.unshift(action.data);
                 draft.addCommentLoading = false;
                 draft.addCommentDone = true;
                 break;

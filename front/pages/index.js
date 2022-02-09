@@ -23,10 +23,10 @@ const Home = () => {
 
     useEffect(() => {
         if (inView && hasMorePosts && !loadPostsLoading) {
-            const lastId = mainPosts[mainPosts.length - 1]?.id;
+            // const lastId = mainPosts[mainPosts.length - 1]?.id;
             dispatch({
                 type: LOAD_POSTS_REQUEST,
-                lastId,
+                // lastId,
             });
         }
     }, [inView, hasMorePosts, loadPostsLoading, mainPosts]);
