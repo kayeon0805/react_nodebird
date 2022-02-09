@@ -95,19 +95,16 @@ function* addPost(action) {
 }
 
 function removePostAPI(data) {
-    return axios.delete('/api/post', data);
+    return axios.delete(`/post/${data}`);
 }
 
 function* removePost(action) {
     try {
-        // const result = yield call(removePostAPI, action.data);
-        yield delay(1000);
-        // post reducer 상태 변경 위함
+        const result = yield call(removePostAPI, action.data);
         yield put({
             type: REMOVE_POST_SUCCESS,
-            data: action.data,
+            data: result.data,
         });
-        // user reducer 상태 변경 위함
         yield put({
             type: REMOVE_POST_OF_ME,
             data: action.data,
