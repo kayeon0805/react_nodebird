@@ -4,6 +4,7 @@ import AppLayout from "../components/AppLayout";
 import PostCard from "../components/PostCard";
 import PostForm from "../components/PostForm";
 import { LOAD_POSTS_REQUEST } from "../reducers/post";
+import { LOAD_MY_INFO_REQUEST } from "../reducers/user";
 
 // 어떤 Element가 화면(viewport)에 노출되었는지를 감지할 수 있는 API
 import { useInView } from 'react-intersection-observer';
@@ -14,8 +15,10 @@ const Home = () => {
     const { mainPosts, hasMorePosts, loadPostsLoading  } = useSelector((state) => state.post);
     const [ref, inView] = useInView();
 
-    // 처음 게시물들 불러올 때
     useEffect(() => {
+        dispatch({ 
+            type: LOAD_MY_INFO_REQUEST 
+        });
         dispatch({
             type: LOAD_POSTS_REQUEST,
         });
@@ -23,10 +26,10 @@ const Home = () => {
 
     useEffect(() => {
         if (inView && hasMorePosts && !loadPostsLoading) {
-            // const lastId = mainPosts[mainPosts.length - 1]?.id;
+            const lastId = mainPosts[mainPosts.length - 1]?.id;
             dispatch({
                 type: LOAD_POSTS_REQUEST,
-                // lastId,
+                lastId,
             });
         }
     }, [inView, hasMorePosts, loadPostsLoading, mainPosts]);
