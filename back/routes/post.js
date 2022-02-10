@@ -88,7 +88,6 @@ router.post('/', isLoggedIn, upload.none(), async (req, res, next) => {
 // .array(fieldname) => fieldname 인자에 명시된 이름의 파일 전부를 배열 형태로 전달 받음
 router.post('/images', isLoggedIn, upload.array('image'), async (req, res, next) => {
     // req.files 는 `image` 라는 파일정보를 배열로 가지고 있음.
-    console.log(req.files);
     res.json(req.files.map((v) => v.filename));
 });
 

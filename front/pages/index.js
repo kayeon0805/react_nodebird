@@ -49,18 +49,8 @@ const Home = () => {
     return (
         <AppLayout>
             {me && <PostForm />}
-            {mainPosts.map((post, i) => {
-                    if (i === mainPosts.length - 3) {
-                        return (
-                            <>
-                                <div ref={hasMorePosts && !loadPostsLoading ? ref : undefined} />
-                                <PostCard key={post.id} post={post} />
-                            </>
-                        )
-                    }
-                    return <PostCard key={post.id} post={post} />
-                })
-            }
+            {mainPosts.map((post) => <PostCard key={post.id} post={post} />)}
+            <div ref={hasMorePosts && !loadPostsLoading ? ref : undefined} />
         </AppLayout>
     )
 }

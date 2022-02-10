@@ -36,7 +36,6 @@ const PostForm = () => {
     }, [imageInput.current]);
 
     const onchangeImages = useCallback((e) => {
-        console.log('images', e.target.files);
         const imageFormData = new FormData();
         // FormData를 배열로 만들기 위함. 
         // e.target.files => 유사배열 / f => 배열의 원소

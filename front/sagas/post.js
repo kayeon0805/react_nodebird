@@ -92,13 +92,14 @@ function* unlikePost(action) {
     }
 }
 
-function loadPostsAPI(data) {
-    return axios.get('/posts', data);
+function loadPostsAPI(lastId) {
+    // 마지막 게시물의 아이디가 없을 경우 0으로 처리
+    return axios.get(`/posts?lastId=${lastId || 0}`);
   }
   
 function* loadPosts(action) {
     try {
-        const result = yield call(loadPostsAPI, action.data);
+        const result = yield call(loadPostsAPI, action.lastId);
         yield put({
             type: LOAD_POSTS_SUCCESS,
             data: result.data,
