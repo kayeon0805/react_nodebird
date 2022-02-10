@@ -2,7 +2,7 @@ const express = require('express');
 const multer = require('multer');
 const path = require('path'); // node에서 제공
 const fs = require('fs'); // 파일시스템 조작
-const { Post, Comment, Image, User } = require('../models');
+const { Post, Comment, Image, User, Hashtag } = require('../models');
 const { isLoggedIn } = require('./middlewares');
 
 const router = express.Router();
@@ -35,10 +35,20 @@ const upload = multer({
 // upload.none() => 오직 텍스트 필드만 허용
 router.post('/', isLoggedIn, upload.none(), async (req, res, next) => {
     try {
+        // ['#노드','#노드','#노드'] => 중복 방지
+        const hashtags = Array.from(new Set(req.body.content.match(/#[^\s#]+/g)));
         const post = await Post.create({
             content: req.body.content,
             UserId: req.user.id,
         });
+        if (hashtags) {
+            // 없을 때는 등록, 있으면 가져옴.
+            const result = await Promise.all(hashtags.map((tag) => Hashtag.findOrCreate({ 
+                where: { name: tag.slice(1).toLowerCase() },
+            })));
+            // => result: [[노드,true], [리액트, true]]
+            await post.addHashtags(result.map((v) => v[0]));
+        }
         if (req.body.image) {
             if (Array.isArray(req.body.image)) { // 이미지를 여러 개 올리면 // image: [안녕.png, 하이.png]
                 // 한 번에 여러 개의 이미지 주소를 DB에 저장
