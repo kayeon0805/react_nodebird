@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const postRouter = require('./routes/post');
 const postsRouter = require('./routes/posts');
 const userRouter = require('./routes/user');
@@ -34,6 +35,8 @@ app.use(cors({
     origin: 'http://localhost:3060',
     credentials: true,
 }));
+// 프론트에서 uploads에 접근할 주소, express.static => 운영체제에 맞게 알아서 해줌.
+app.use('/', express.static(path.join(__dirname, 'uploads')));
 
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(session({
