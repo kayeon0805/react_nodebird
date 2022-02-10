@@ -108,6 +108,6 @@ router.delete('/:postId', isLoggedIn, async (req, res, next) => {
         next(error);
     }
 });
- 
+
 
 module.exports = router;
