@@ -44,47 +44,6 @@ router.get("/", async (req, res, next) => {
     }
 });
 
-// 특정 유저 정보
-router.get("/:userId", async (req, res, next) => {
-    try {
-        const fullUserWithoutPassword = await User.findOne({
-            where: { id: req.params.userId },
-            attributes: {
-                exclude: ["password"],
-            },
-            include: [
-                {
-                    model: Post,
-                    attributes: ["id"],
-                },
-                {
-                    model: User,
-                    as: "Followings",
-                    attributes: ["id"],
-                },
-                {
-                    model: User,
-                    as: "Followers",
-                    attributes: ["id"],
-                },
-            ],
-        });
-        if (fullUserWithoutPassword) {
-            // 타인의 정보이므로 개인정보 보호
-            const data = fullUserWithoutPassword.toJSON();
-            data.Posts = data.Posts.length;
-            data.Followers = data.Followers.length;
-            data.Followings = data.Followings.length;
-            return res.status(200).json(data);
-        } else {
-            res.status(404).json("존재하지 않는 사용자입니다.");
-        }
-    } catch (error) {
-        console.error(error);
-        next(error);
-    }
-});
-
 // 로그인
 // 미들웨어 확장
 router.post("/login", isNotLoggedIn, (req, res, next) => {
@@ -288,11 +247,13 @@ router.delete("/follower/:userId", isLoggedIn, async (req, res, next) => {
     }
 });
 
-// 팔로워 추가
+// 팔로워 불러오기
 router.get("/followers", isLoggedIn, async (req, res, next) => {
     try {
         const user = await User.findOne({ where: { id: req.user.id } });
-        const followers = await user.getFollowers();
+        const followers = await user.getFollowers({
+            limit: parseInt(req.query.limit, 10),
+        });
         res.status(200).json(followers);
     } catch (error) {
         console.error(error);
@@ -300,12 +261,55 @@ router.get("/followers", isLoggedIn, async (req, res, next) => {
     }
 });
 
-// 팔로잉 추가
+// 팔로잉 불러오기
 router.get("/followings", isLoggedIn, async (req, res, next) => {
     try {
         const user = await User.findOne({ where: { id: req.user.id } });
-        const followings = await user.getFollowings();
+        const followings = await user.getFollowings({
+            limit: parseInt(req.query.limit, 10),
+        });
         res.status(200).json(followings);
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
+});
+
+// 특정 유저 정보
+router.get("/:userId", async (req, res, next) => {
+    try {
+        const fullUserWithoutPassword = await User.findOne({
+            where: { id: req.params.userId },
+            attributes: {
+                exclude: ["password"],
+            },
+            include: [
+                {
+                    model: Post,
+                    attributes: ["id"],
+                },
+                {
+                    model: User,
+                    as: "Followings",
+                    attributes: ["id"],
+                },
+                {
+                    model: User,
+                    as: "Followers",
+                    attributes: ["id"],
+                },
+            ],
+        });
+        if (fullUserWithoutPassword) {
+            // 타인의 정보이므로 개인정보 보호
+            const data = fullUserWithoutPassword.toJSON();
+            data.Posts = data.Posts.length;
+            data.Followers = data.Followers.length;
+            data.Followings = data.Followings.length;
+            return res.status(200).json(data);
+        } else {
+            res.status(404).json("존재하지 않는 사용자입니다.");
+        }
     } catch (error) {
         console.error(error);
         next(error);

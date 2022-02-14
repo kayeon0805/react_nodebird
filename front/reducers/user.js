@@ -1,4 +1,4 @@
-import produce from "immer";
+import produce from "../util/produce";
 
 export const initialState = {
     removeFollowerLoading: false, // 팔로워 차단 시도 중
