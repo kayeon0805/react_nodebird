@@ -29,6 +29,9 @@ export const initialState = {
     removePostLoading: false,
     removePostDone: false,
     removePostError: null,
+    modifyPostLoading: false,
+    modifyPostDone: false,
+    modifyPostError: null,
     retweetLoading: false,
     retweetDone: false,
     retweetError: null,
@@ -73,6 +76,10 @@ export const ADD_COMMENT_FAILURE = "ADD_COMMENT_FAILURE";
 export const REMOVE_POST_REQUEST = "REMOVE_POST_REQUEST";
 export const REMOVE_POST_SUCCESS = "REMOVE_POST_SUCCESS";
 export const REMOVE_POST_FAILURE = "REMOVE_POST_FAILURE";
+
+export const MODIFY_POST_REQUEST = "MODIFY_POST_REQUEST";
+export const MODIFY_POST_SUCCESS = "MODIFY_POST_SUCCESS";
+export const MODIFY_POST_FAILURE = "MODIFY_POST_FAILURE";
 
 export const RETWEET_REQUEST = "RETWEET_REQUEST";
 export const RETWEET_SUCCESS = "RETWEET_SUCCESS";
@@ -226,6 +233,24 @@ const reducer = (state = initialState, action) => {
             case REMOVE_POST_FAILURE:
                 draft.removePostLoading = false;
                 draft.removePostError = action.error;
+                break;
+            case MODIFY_POST_REQUEST:
+                draft.modifyPostLoading = true;
+                draft.modifyPostDone = false;
+                draft.modifyPostError = null;
+                break;
+            case MODIFY_POST_SUCCESS: {
+                const index = draft.mainPosts.findIndex(
+                    (v) => v.id === action.data.id
+                );
+                draft.modifyPostLoading = false;
+                draft.modifyPostDone = true;
+                draft.mainPosts[index] = action.data;
+                break;
+            }
+            case MODIFY_POST_FAILURE:
+                draft.modifyPostLoading = false;
+                draft.modifyPostError = action.error;
                 break;
             case ADD_COMMENT_REQUEST:
                 draft.addCommentLoading = true;

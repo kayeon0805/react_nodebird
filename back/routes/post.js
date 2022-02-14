@@ -145,6 +145,70 @@ router.post("/:postId/comment", isLoggedIn, async (req, res, next) => {
     }
 });
 
+router.patch("/modify", isLoggedIn, async (req, res, next) => {
+    const { postId } = req.body;
+    const { content } = req.body;
+    try {
+        const post = await Post.findOne({
+            where: { id: postId },
+        });
+        if (!post) {
+            return res.status(404).send("존재하지 않는 게시글입니다.");
+        }
+        const updatePost = await Post.update(
+            {
+                content: content,
+            },
+            {
+                where: { id: postId },
+            }
+        );
+        const fullPost = await Post.findOne({
+            where: { id: postId },
+            include: [
+                {
+                    model: User,
+                    attributes: ["id", "nickname"],
+                },
+                {
+                    model: Comment,
+                    include: [
+                        {
+                            model: User,
+                            attributes: ["id", "nickname"],
+                        },
+                    ],
+                },
+                {
+                    model: Image,
+                },
+                {
+                    model: User,
+                    as: "Likers",
+                    attributes: ["id", "nickname"],
+                },
+                {
+                    model: Post,
+                    as: "Retweet",
+                    inclde: [
+                        {
+                            model: User,
+                            attributes: ["id", "nickname"],
+                        },
+                        {
+                            model: Image,
+                        },
+                    ],
+                },
+            ],
+        });
+        res.status(200).json(fullPost);
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
+});
+
 // 특정 게시물 블러오기
 router.get("/:postId", async (req, res, next) => {
     try {

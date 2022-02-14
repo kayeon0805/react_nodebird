@@ -7,6 +7,7 @@ import { LOAD_POSTS_REQUEST } from "../reducers/post";
 import { LOAD_MY_INFO_REQUEST } from "../reducers/user";
 import wrapper from "../store/configureStore";
 import { END } from "redux-saga";
+import router from "next/router";
 
 // 어떤 Element가 화면(viewport)에 노출되었는지를 감지할 수 있는 API
 import { useInView } from "react-intersection-observer";

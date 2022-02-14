@@ -22,6 +22,9 @@ import {
     LOAD_USER_POSTS_FAILURE,
     LOAD_USER_POSTS_REQUEST,
     LOAD_USER_POSTS_SUCCESS,
+    MODIFY_POST_FAILURE,
+    MODIFY_POST_REQUEST,
+    MODIFY_POST_SUCCESS,
     REMOVE_POST_FAILURE,
     REMOVE_POST_REQUEST,
     REMOVE_POST_SUCCESS,
@@ -252,6 +255,29 @@ function* removePost(action) {
     }
 }
 
+function modifyPostAPI(data) {
+    return axios.patch(`/post/modify`, {
+        postId: data.postId,
+        content: data.content,
+    });
+}
+
+function* modifyPost(action) {
+    try {
+        const result = yield call(modifyPostAPI, action.data);
+        yield put({
+            type: MODIFY_POST_SUCCESS,
+            data: result.data,
+        });
+    } catch (err) {
+        console.error(err);
+        yield put({
+            type: MODIFY_POST_FAILURE,
+            error: err.response.data,
+        });
+    }
+}
+
 function addCommentAPI(data) {
     return axios.post(`/post/${data.postId}/comment`, data);
 }
@@ -312,6 +338,10 @@ function* watchRemovePost() {
     yield takeLatest(REMOVE_POST_REQUEST, removePost);
 }
 
+function* watchModiFyPost() {
+    yield takeLatest(MODIFY_POST_REQUEST, modifyPost);
+}
+
 function* watchRetweet() {
     yield takeLatest(RETWEET_REQUEST, retweet);
 }
@@ -328,6 +358,7 @@ export default function* postSaga() {
         fork(watchLoadHashtagPosts),
         fork(watchLoadPosts),
         fork(watchRemovePost),
+        fork(watchModiFyPost),
         fork(watchAddComment),
     ]);
 }
