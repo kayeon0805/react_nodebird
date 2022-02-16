@@ -145,6 +145,7 @@ router.post("/:postId/comment", isLoggedIn, async (req, res, next) => {
     }
 });
 
+// 게시글 수정
 router.patch("/modify", isLoggedIn, async (req, res, next) => {
     const { postId } = req.body;
     const { content } = req.body;
@@ -155,7 +156,33 @@ router.patch("/modify", isLoggedIn, async (req, res, next) => {
         if (!post) {
             return res.status(404).send("존재하지 않는 게시글입니다.");
         }
-        const updatePost = await Post.update(
+        // 수정 전 해시태그 지우기
+        const exHashtags = Array.from(new Set(post.content.match(/#[^\s#]+/g)));
+        if (exHashtags) {
+            const exResult = await Promise.all(
+                exHashtags.map((tag) =>
+                    Hashtag.findOne({
+                        where: { name: tag.slice(1).toLowerCase() },
+                    })
+                )
+            );
+            await post.removeHashtags(exResult.map((v) => v[0]));
+        }
+        // 해시태그 추가하기
+        const hashtags = Array.from(new Set(content.match(/#[^\s#]+/g)));
+        if (hashtags) {
+            // 없을 때는 등록, 있으면 가져옴.
+            const result = await Promise.all(
+                hashtags.map((tag) =>
+                    Hashtag.findOrCreate({
+                        where: { name: tag.slice(1).toLowerCase() },
+                    })
+                )
+            );
+            // => result: [[노드,true], [리액트, true]]
+            await post.addHashtags(result.map((v) => v[0]));
+        }
+        await Post.update(
             {
                 content: content,
             },
