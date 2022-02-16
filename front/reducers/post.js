@@ -2,7 +2,9 @@ import produce from "../util/produce";
 
 export const initialState = {
     mainPosts: [],
+    searchPosts: [],
     imagePaths: [],
+    modifyImagePaths: [],
     singlePost: null,
     hasMorePosts: true,
     uploadImagesLoading: false,
@@ -35,6 +37,9 @@ export const initialState = {
     retweetLoading: false,
     retweetDone: false,
     retweetError: null,
+    searchInputLoading: false,
+    searchInputDone: false,
+    searchInputError: null,
 };
 
 export const UPLOAD_IMAGES_REQUEST = "UPLOAD_IMAGES_REQUEST";
@@ -85,7 +90,13 @@ export const RETWEET_REQUEST = "RETWEET_REQUEST";
 export const RETWEET_SUCCESS = "RETWEET_SUCCESS";
 export const RETWEET_FAILURE = "RETWEET_FAILURE";
 
+export const SEARCH_INPUT_REQUEST = "SEARCH_INPUT_REQUEST";
+export const SEARCH_INPUT_SUCCESS = "SEARCH_INPUT_SUCCESS";
+export const SEARCH_INPUT_FAILURE = "SEARCH_INPUT_FAILURE";
+
 export const REMOVE_IMAGE = "REMOVE_IMAGE";
+
+export const SHOW_IMAGE = "SHOW_IMAGE";
 
 export const addComment = (data) => ({
     type: ADD_COMMENT_REQUEST,
@@ -95,10 +106,28 @@ export const addComment = (data) => ({
 const reducer = (state = initialState, action) => {
     return produce(state, (draft) => {
         switch (action.type) {
+            case SHOW_IMAGE:
+                draft.modifyImagePaths = action.data;
+                break;
             case REMOVE_IMAGE:
                 draft.imagePaths = draft.imagePaths.filter(
                     (v, i) => i !== action.data
                 );
+                break;
+            case SEARCH_INPUT_REQUEST:
+                draft.searchInputLoading = true;
+                draft.searchInputDone = false;
+                draft.searchInputError = null;
+                break;
+            case SEARCH_INPUT_SUCCESS: {
+                draft.searchPosts = action.data;
+                draft.searchInputLoading = false;
+                draft.searchInputDone = true;
+                break;
+            }
+            case SEARCH_INPUT_FAILURE:
+                draft.searchInputLoading = false;
+                draft.searchInputError = action.error;
                 break;
             case RETWEET_REQUEST:
                 draft.retweetLoading = true;

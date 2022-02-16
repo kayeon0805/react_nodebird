@@ -1,14 +1,14 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
 import Link from "next/link";
 import { Input, Menu, Row, Col } from "antd";
 import LoginForm from "./LoginForm";
 import UserProfile from "./UserProfile";
 import styled from "styled-components";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { createGlobalStyle } from "styled-components";
 import useInput from "../hooks/useInput";
-import Router from "next/router";
+import { SEARCH_INPUT_REQUEST } from "../reducers/post";
 
 const Global = createGlobalStyle`
     .ant-row {
@@ -32,9 +32,17 @@ const SearchInput = styled(Input.Search)`
 const AppLayout = ({ children }) => {
     const [searchInput, onChangeSearchInput] = useInput("");
     const { me } = useSelector((state) => state.user);
+    const dispatch = useDispatch();
+    const { searchInputLoading } = useSelector((state) => state.post);
 
     const onSearch = useCallback(() => {
-        Router.push(`/hashtag/${searchInput}`);
+        if (!searchInput) {
+            return alert("검색할 게시글 내용을 입력해주세요.");
+        }
+        dispatch({
+            type: SEARCH_INPUT_REQUEST,
+            data: searchInput,
+        });
     }, [searchInput]);
 
     return (
@@ -57,6 +65,7 @@ const AppLayout = ({ children }) => {
                         value={searchInput}
                         onChange={onChangeSearchInput}
                         onSearch={onSearch}
+                        loading={searchInputLoading}
                     />
                 </Menu.Item>
             </Menu>

@@ -31,6 +31,9 @@ import {
     RETWEET_FAILURE,
     RETWEET_REQUEST,
     RETWEET_SUCCESS,
+    SEARCH_INPUT_FAILURE,
+    SEARCH_INPUT_REQUEST,
+    SEARCH_INPUT_SUCCESS,
     UNLIKE_POST_FAILURE,
     UNLIKE_POST_REQUEST,
     UNLIKE_POST_SUCCESS,
@@ -298,6 +301,27 @@ function* addComment(action) {
     }
 }
 
+function searchPostsAPI(data) {
+    return axios.post(`/post/search`, { search: data });
+}
+
+function* searchPosts(action) {
+    try {
+        const result = yield call(searchPostsAPI, action.data);
+        console.log("여기요~", result);
+        yield put({
+            type: SEARCH_INPUT_SUCCESS,
+            data: result.data,
+        });
+    } catch (err) {
+        console.error(err);
+        yield put({
+            type: SEARCH_INPUT_FAILURE,
+            error: err.response.data,
+        });
+    }
+}
+
 function* watchUploadImages() {
     yield takeLatest(UPLOAD_IMAGES_REQUEST, uploadImages);
 }
@@ -346,6 +370,10 @@ function* watchRetweet() {
     yield takeLatest(RETWEET_REQUEST, retweet);
 }
 
+function* watchSearchPosts() {
+    yield takeLatest(SEARCH_INPUT_REQUEST, searchPosts);
+}
+
 export default function* postSaga() {
     yield all([
         fork(watchRetweet),
@@ -360,5 +388,6 @@ export default function* postSaga() {
         fork(watchRemovePost),
         fork(watchModiFyPost),
         fork(watchAddComment),
+        fork(watchSearchPosts),
     ]);
 }

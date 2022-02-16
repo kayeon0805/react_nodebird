@@ -4,6 +4,7 @@ const path = require("path"); // node에서 제공
 const fs = require("fs"); // 파일시스템 조작
 const { Post, Comment, Image, User, Hashtag } = require("../models");
 const { isLoggedIn } = require("./middlewares");
+const { Op } = require("sequelize");
 
 const router = express.Router();
 
@@ -37,6 +38,7 @@ const upload = multer({
 // upload.none() => 오직 텍스트 필드만 허용
 router.post("/", isLoggedIn, upload.none(), async (req, res, next) => {
     try {
+        console.log(req.body.image);
         // ['#노드','#노드','#노드'] => 중복 방지
         const hashtags = Array.from(
             new Set(req.body.content.match(/#[^\s#]+/g))
@@ -190,9 +192,36 @@ router.patch("/modify", isLoggedIn, async (req, res, next) => {
                 where: { id: postId },
             }
         );
+        if (req.body.image) {
+            if (Array.isArray(req.body.image)) {
+                // 이미지를 여러 개 올리면 // image: [안녕.png, 하이.png]
+                // 한 번에 여러 개의 이미지 주소를 DB에 저장
+                const images = await Promise.all(
+                    req.body.image.map((image) => Image.create({ src: image }))
+                );
+                await post.addImages(images);
+            } else {
+                // 하나만 올리면 image: 안녕.png
+                const image = await Image.create({ src: req.body.image });
+                await post.addImages(image);
+            }
+        }
         const fullPost = await Post.findOne({
             where: { id: postId },
             include: [
+                {
+                    model: Post,
+                    as: "Retweet",
+                    inclde: [
+                        {
+                            model: User,
+                            attributes: ["id", "nickname"],
+                        },
+                        {
+                            model: Image,
+                        },
+                    ],
+                },
                 {
                     model: User,
                     attributes: ["id", "nickname"],
@@ -419,6 +448,51 @@ router.delete("/:postId", isLoggedIn, async (req, res, next) => {
             UserId: req.user.id,
         });
         res.status(200).json({ PostId: parseInt(req.params.postId) });
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
+});
+
+// 검색
+router.post("/search", async (req, res, next) => {
+    try {
+        console.log("왔어요");
+        console.log(req.body.search);
+        const searchPost = await Post.findAll({
+            where: {
+                content: {
+                    [Op.like]: "%" + req.body.search + "%",
+                },
+            },
+            include: [
+                {
+                    model: User,
+                    attributes: ["id", "nickname"],
+                },
+                {
+                    model: Comment,
+                    include: [
+                        {
+                            model: User,
+                            attributes: ["id", "nickname"],
+                        },
+                    ],
+                },
+                {
+                    model: Image,
+                },
+                {
+                    model: Hashtag,
+                },
+                {
+                    model: User,
+                    as: "Likers",
+                    attributes: ["id", "nickname"],
+                },
+            ],
+        });
+        res.status(200).json(searchPost);
     } catch (error) {
         console.error(error);
         next(error);

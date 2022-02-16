@@ -8,7 +8,7 @@ export const Overlay = styled.div`
     left: 0;
     right: 0;
     bottom: 0;
-`
+`;
 export const Header = styled.header`
     height: 44px;
     background: white;
@@ -23,7 +23,7 @@ export const Header = styled.header`
         line-height: 44px;
     }
 `;
- 
+
 export const CloseBtn = styled(CloseOutlined)`
     position: absolute;
     right: 0;
@@ -45,7 +45,7 @@ export const ImgWrapper = styled.div`
     & img {
         margin: 0 auto;
         width: 55%;
-        height: auto%;
+        height: auto;
         object-fit: cover;
     }
 `;

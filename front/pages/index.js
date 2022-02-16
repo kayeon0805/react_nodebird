@@ -7,17 +7,30 @@ import { LOAD_POSTS_REQUEST } from "../reducers/post";
 import { LOAD_MY_INFO_REQUEST } from "../reducers/user";
 import wrapper from "../store/configureStore";
 import { END } from "redux-saga";
-import router from "next/router";
+import styled from "styled-components";
 
 // 어떤 Element가 화면(viewport)에 노출되었는지를 감지할 수 있는 API
 import { useInView } from "react-intersection-observer";
 import axios from "axios";
 
+const Message = styled.div`
+    border: 1px solid black;
+    height: 100;
+    line-height: 7;
+    text-align: center;
+`;
+
 const Home = () => {
     const dispatch = useDispatch();
     const { me } = useSelector((state) => state.user);
-    const { mainPosts, hasMorePosts, loadPostsLoading, retweetError } =
-        useSelector((state) => state.post);
+    const {
+        mainPosts,
+        hasMorePosts,
+        loadPostsLoading,
+        retweetError,
+        searchInputDone,
+        searchPosts,
+    } = useSelector((state) => state.post);
     const [ref, inView] = useInView();
 
     useEffect(() => {
@@ -45,9 +58,16 @@ const Home = () => {
     return (
         <AppLayout>
             {me && <PostForm />}
-            {mainPosts.map((post) => (
-                <PostCard key={post.id} post={post} />
-            ))}
+            {searchInputDone && searchPosts.length < 1 && (
+                <Message>게시글이 존재하지 않습니다.</Message>
+            )}
+            {searchInputDone
+                ? searchPosts.map((post) => (
+                      <PostCard key={post.id} post={post} />
+                  ))
+                : mainPosts.map((post) => (
+                      <PostCard key={post.id} post={post} />
+                  ))}
             <div ref={hasMorePosts && !loadPostsLoading ? ref : undefined} />
         </AppLayout>
     );
