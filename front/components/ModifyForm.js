@@ -4,7 +4,8 @@ import React, { useCallback, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import useInput from "../hooks/useInput";
 import { MODIFY_POST_REQUEST, SHOW_IMAGE } from "../reducers/post";
-
+import "moment/locale/ko";
+moment.locale("ko");
 const ModifyForm = ({ post, setModifyPost }) => {
     const { modifyImagePaths, modifyPostLoading } = useSelector(
         (state) => state.post

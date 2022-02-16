@@ -365,7 +365,7 @@ router.post("/:postId/retweet", isLoggedIn, async (req, res, next) => {
                 {
                     model: Post,
                     as: "Retweet",
-                    inclde: [
+                    include: [
                         {
                             model: User,
                             attributes: ["id", "nickname"],
@@ -380,7 +380,7 @@ router.post("/:postId/retweet", isLoggedIn, async (req, res, next) => {
                     attributes: ["id", "nickname"],
                 },
                 {
-                    model: User,
+                    model: User, // 좋아요 누른 사람
                     as: "Likers",
                     attributes: ["id"],
                 },
@@ -389,7 +389,7 @@ router.post("/:postId/retweet", isLoggedIn, async (req, res, next) => {
                 },
                 {
                     model: Comment,
-                    inclde: [
+                    include: [
                         {
                             model: User,
                             attributes: ["id", "nickname"],

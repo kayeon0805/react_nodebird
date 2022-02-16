@@ -47,7 +47,7 @@ const UserProfile = () => {
                 avatar={
                     <Avatar>
                         <Link href={`/user/${me.id}`}>
-                            <a>{me.nickname[0]}</a>
+                            <a style={{ color: "white" }}>{me.nickname[0]}</a>
                         </Link>
                     </Avatar>
                 }

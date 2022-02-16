@@ -22,7 +22,7 @@ import FollowButton from "./FollowButton";
 import Link from "next/link";
 import moment from "moment";
 import ModifyForm from "./ModifyForm";
-
+import "moment/locale/ko";
 moment.locale("ko");
 
 const PostCard = ({ post }) => {
@@ -161,7 +161,7 @@ const PostCard = ({ post }) => {
                                         <Link
                                             href={`/user/${post.Retweet.User.id}`}
                                         >
-                                            <a>
+                                            <a style={{ color: "white" }}>
                                                 {post.Retweet.User.nickname[0]}
                                             </a>
                                         </Link>
@@ -184,7 +184,9 @@ const PostCard = ({ post }) => {
                                 avatar={
                                     <Avatar>
                                         <Link href={`/user/${post.User.id}`}>
-                                            <a>{post.User.nickname[0]}</a>
+                                            <a style={{ color: "white" }}>
+                                                {post.User.nickname[0]}
+                                            </a>
                                         </Link>
                                     </Avatar>
                                 }
@@ -212,7 +214,11 @@ const PostCard = ({ post }) => {
                                                 <Link
                                                     href={`/user/${item.User.id}`}
                                                 >
-                                                    <a>
+                                                    <a
+                                                        style={{
+                                                            color: "white",
+                                                        }}
+                                                    >
                                                         {post.User.nickname[0]}
                                                     </a>
                                                 </Link>
