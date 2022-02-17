@@ -43,7 +43,7 @@ app.use(
     cors({
         origin: [
             "http://localhost:3060",
-            "nodebird.com",
+            "http://nodebird.site",
             "http://52.78.186.136",
         ],
         credentials: true,
