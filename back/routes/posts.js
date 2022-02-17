@@ -1,5 +1,6 @@
 const express = require("express");
 const { Op } = require("sequelize");
+
 const { Post, Image, User, Comment } = require("../models");
 
 const router = express.Router();
@@ -12,8 +13,8 @@ router.get("/", async (req, res, next) => {
         if (parseInt(req.query.lastId, 10)) {
             // 게시물이 디샌딩 순이므로 다음 게시물들을 불러올 때
             // lastId보다 작은 수부터 불러와야 함
-            where.id = { [Op.lt]: parseInt(req.query.lastId, 10) }; // id가 lastId보다 작은
-        }
+            where.id = { [Op.lt]: parseInt(req.query.lastId, 10) };
+        } // 21 20 19 18 17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1
         const posts = await Post.findAll({
             where,
             limit: 10,

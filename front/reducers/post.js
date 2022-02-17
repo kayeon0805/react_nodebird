@@ -211,8 +211,8 @@ const reducer = (state = initialState, action) => {
                 draft.loadPostLoading = false;
                 draft.loadPostError = action.error;
                 break;
-            case LOAD_USER_POSTS_REQUEST:
             case LOAD_HASHTAG_POSTS_REQUEST:
+            case LOAD_USER_POSTS_REQUEST:
             case LOAD_POSTS_REQUEST:
                 draft.loadPostsLoading = true;
                 draft.loadPostsDone = false;
