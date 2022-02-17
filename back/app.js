@@ -30,25 +30,27 @@ passportConfig();
 if (process.env.NODE_ENV === "production") {
     app.use(morgan("combined")); // 프론트 서버에서 백엔드 서버로 보낸 요청 확인 가능
     app.use(hpp());
-    app.use(helmet());
+    app.use(helmet({ contentSecurityPolicy: false }));
+    app.use(
+        cors({
+            origin: ["http://nodebird.site", "http://52.78.186.136"],
+            credentials: true,
+        })
+    );
 } else {
     app.use(morgan("dev"));
+    app.use(
+        cors({
+            origin: true,
+            credentials: true,
+        })
+    );
 }
 // json 형태로 request body 받기 위함.
 // form을 submit했을 때 넘어오는 데이터를 request body로 받기 위함.
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(
-    cors({
-        origin: [
-            "http://localhost:3060",
-            "http://nodebird.site",
-            "http://52.78.186.136",
-        ],
-        credentials: true,
-    })
-);
 // 프론트에서 uploads에 접근할 주소, express.static => 운영체제에 맞게 알아서 해줌.
 app.use("/", express.static(path.join(__dirname, "uploads")));
 
@@ -58,6 +60,11 @@ app.use(
         saveUninitialized: false,
         resave: false,
         secret: process.env.COOKIE_SECRET,
+        cookie: {
+            httpOnly: true,
+            secure: false,
+            domain: process.env.NODE_ENV === "production" && ".nodebird.com",
+        },
     })
 );
 app.use(passport.initialize());
