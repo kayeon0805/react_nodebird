@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import useInput from "../hooks/useInput";
 import { MODIFY_POST_REQUEST, SHOW_IMAGE } from "../reducers/post";
 import "moment/locale/ko";
+import { backUrl } from "../config/config";
 moment.locale("ko");
 const ModifyForm = ({ post, setModifyPost }) => {
     const { modifyImagePaths, modifyPostLoading } = useSelector(
@@ -47,7 +48,7 @@ const ModifyForm = ({ post, setModifyPost }) => {
                 {modifyImagePaths.map((v, i) => (
                     <div key={v.src} style={{ display: "inline-block" }}>
                         <img
-                            src={`http://localhost:3065/${v.src}`}
+                            src={`${backUrl}/${v.src}`}
                             style={{ width: "200px" }}
                             alt={v.src}
                         />

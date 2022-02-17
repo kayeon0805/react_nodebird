@@ -1,7 +1,16 @@
 import React, { useState } from "react";
-import PropTypes from 'prop-types';
-import Slick from 'react-slick';
-import { CloseBtn, Global, Header, ImgWrapper, Indicator, Overlay, SlickWrapper } from "./styles";
+import PropTypes from "prop-types";
+import Slick from "react-slick";
+import {
+    CloseBtn,
+    Global,
+    Header,
+    ImgWrapper,
+    Indicator,
+    Overlay,
+    SlickWrapper,
+} from "./styles";
+import { backUrl } from "../../config/config";
 
 const ImagesZoom = ({ images, onClose }) => {
     const [currentSlide, setCurrentSlide] = useState(0);
@@ -13,7 +22,7 @@ const ImagesZoom = ({ images, onClose }) => {
                 <CloseBtn onClick={onClose}>X</CloseBtn>
             </Header>
             <SlickWrapper>
-                <Slick 
+                <Slick
                     initialSlide={0}
                     afterChange={(slide) => setCurrentSlide(slide)}
                     infinite
@@ -23,25 +32,23 @@ const ImagesZoom = ({ images, onClose }) => {
                 >
                     {images.map((v) => (
                         <ImgWrapper key={v.src}>
-                            <img src={`http://localhost:3065/${v.src}`} alt={v.src} />
+                            <img src={`${backUrl}/${v.src}`} alt={v.src} />
                         </ImgWrapper>
                     ))}
                 </Slick>
                 <Indicator>
                     <div>
-                        {currentSlide + 1}
-                        {' '} / {' '}
-                        {images.length}
+                        {currentSlide + 1} / {images.length}
                     </div>
                 </Indicator>
             </SlickWrapper>
         </Overlay>
     );
-}
+};
 
 ImagesZoom.propTypes = {
     imazes: PropTypes.arrayOf(PropTypes.object).isRequired,
-    onClose: PropTypes.func.isRequired
+    onClose: PropTypes.func.isRequired,
 };
 
 export default ImagesZoom;
