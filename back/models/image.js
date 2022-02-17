@@ -14,7 +14,7 @@ module.exports = class Image extends Model {
             {
                 modelName: "Image",
                 tableName: "images",
-                // 한글 저장
+                // 한글  저장
                 charset: "utf8",
                 collate: "utf8_general_ci",
                 sequelize,
