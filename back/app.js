@@ -12,6 +12,8 @@ const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const dotenv = require("dotenv");
 const morgan = require("morgan");
+const hpp = require("hpp");
+const helmet = require("helmet");
 
 dotenv.config();
 
@@ -25,17 +27,21 @@ db.sequelize
 
 passportConfig();
 
+if (process.env.NODE_ENV === "production") {
+    app.use(morgan("combined")); // 프론트 서버에서 백엔드 서버로 보낸 요청 확인 가능
+    app.use(hpp());
+    app.use(helmet());
+} else {
+    app.use(morgan("dev"));
+}
 // json 형태로 request body 받기 위함.
 // form을 submit했을 때 넘어오는 데이터를 request body로 받기 위함.
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// 프론트 서버에서 백엔드 서버로 보낸 요청 확인 가능
-app.use(morgan("dev"));
-
 app.use(
     cors({
-        origin: "http://localhost:3060",
+        origin: ["http://localhost:3060", "nodebird.com"],
         credentials: true,
     })
 );
