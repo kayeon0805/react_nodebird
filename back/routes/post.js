@@ -23,7 +23,6 @@ AWS.config.update({
     region: "ap-northeast-2",
 });
 const upload = multer({
-    // 파일을 디스크에 저장하기 위함.
     storage: multerS3({
         s3: new AWS.S3(),
         bucket: "react-nodebird-aws-s3",
