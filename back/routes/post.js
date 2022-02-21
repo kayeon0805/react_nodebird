@@ -1,7 +1,6 @@
 const express = require("express");
 const multer = require("multer");
 const path = require("path"); // node에서 제공
-const fs = require("fs"); // 파일시스템 조작
 const { Post, Comment, Image, User, Hashtag } = require("../models");
 const { isLoggedIn } = require("./middlewares");
 const { Op } = require("sequelize");
@@ -9,13 +8,6 @@ const multerS3 = require("multer-s3");
 const AWS = require("aws-sdk");
 
 const router = express.Router();
-
-try {
-    fs.accessSync("uploads");
-} catch (error) {
-    console.log("uploads 폴더가 없으므로 생성합니다.");
-    fs.mkdirSync("uploads");
-}
 
 AWS.config.update({
     accessKeyId: process.env.S3_ACCESS_KEY_ID,
@@ -116,7 +108,9 @@ router.post(
     upload.array("image"),
     async (req, res, next) => {
         // req.files 는 `image` 라는 파일정보를 배열로 가지고 있음.
-        res.json(req.files.map((v) => v.location));
+        res.json(
+            req.files.map((v) => v.location.replace(/\/original\//, "/thumb/"))
+        );
     }
 );
 

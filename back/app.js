@@ -51,9 +51,6 @@ if (process.env.NODE_ENV === "production") {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// 프론트에서 uploads에 접근할 주소, express.static => 운영체제에 맞게 알아서 해줌.
-app.use("/", express.static(path.join(__dirname, "uploads")));
-
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(
     session({
