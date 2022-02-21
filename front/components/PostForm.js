@@ -85,6 +85,7 @@ const PostForm = () => {
                     hidden
                     ref={imageInput}
                     onChange={onchangeImages}
+                    accept="image/*"
                 />
                 <Button onClick={onClickImageUpload}>이미지 업로드</Button>
                 <Button
