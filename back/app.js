@@ -33,7 +33,7 @@ if (process.env.NODE_ENV === "production") {
     app.use(helmet({ contentSecurityPolicy: false }));
     app.use(
         cors({
-            origin: ["http://nodebird.site", "http://52.78.186.136"],
+            origin: ["http://nodebird.site"],
             credentials: true,
         })
     );
@@ -63,7 +63,7 @@ app.use(
         cookie: {
             httpOnly: true,
             secure: false,
-            domain: process.env.NODE_ENV === "production" && ".nodebird.com",
+            domain: process.env.NODE_ENV === "production" && ".nodebird.site",
         },
     })
 );
