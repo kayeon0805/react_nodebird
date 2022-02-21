@@ -5,6 +5,8 @@ const fs = require("fs"); // 파일시스템 조작
 const { Post, Comment, Image, User, Hashtag } = require("../models");
 const { isLoggedIn } = require("./middlewares");
 const { Op } = require("sequelize");
+const multerS3 = require("multer-s3");
+const AWS = require("aws-sdk");
 
 const router = express.Router();
 
@@ -15,19 +17,21 @@ try {
     fs.mkdirSync("uploads");
 }
 
+AWS.config.update({
+    accessKeyId: process.env.S3_ACCESS_KEY_ID,
+    secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+    region: "ap-northeast-2",
+});
 const upload = multer({
     // 파일을 디스크에 저장하기 위함.
-    storage: multer.diskStorage({
-        // 어느 폴더안에 업로드 한 파일을 저장할 지를 결정
-        destination(req, file, done) {
-            done(null, "uploads");
-        },
-        // 폴더안에 저장되는 파일 명을 결정하는데 사용
-        filename(req, file, done) {
-            // 안녕.png
-            const ext = path.extname(file.originalname); // 확장자 추출(.png)
-            const basename = path.basename(file.originalname, ext); // 안녕
-            done(null, basename + "_" + new Date().getTime() + ext); // 안녕213121341.png
+    storage: multerS3({
+        s3: new AWS.S3(),
+        bucket: "react-nodebird-aws-s3",
+        key(req, file, cb) {
+            cb(
+                null,
+                `original/${Date.now()}_${path.basename(file.originalname)}`
+            );
         },
     }),
     // 크기 제한을 지정
@@ -113,7 +117,7 @@ router.post(
     upload.array("image"),
     async (req, res, next) => {
         // req.files 는 `image` 라는 파일정보를 배열로 가지고 있음.
-        res.json(req.files.map((v) => v.filename));
+        res.json(req.files.map((v) => v.location));
     }
 );
 
