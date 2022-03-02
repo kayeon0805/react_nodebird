@@ -24,6 +24,7 @@ exports.handler = async (event, context, callback) => {
                 Body: resizedImage,
             })
             .promise();
+        console.log("lambda 테스트", filename);
         return callback(null, `thumb/${filename}`);
     } catch (error) {
         console.error(error);
