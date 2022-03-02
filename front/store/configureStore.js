@@ -1,29 +1,33 @@
-import { createWrapper } from 'next-redux-wrapper';
-import { applyMiddleware, compose, createStore } from 'redux';
-import rootReducer from '../reducers';
-import { composeWithDevTools } from 'redux-devtools-extension';
-import createSagaMiddleware from 'redux-saga';
-import rootSaga from "../sagas"
+import { createWrapper } from "next-redux-wrapper";
+import { applyMiddleware, compose, createStore } from "redux";
+import rootReducer from "../reducers";
+import { composeWithDevTools } from "redux-devtools-extension";
+import createSagaMiddleware from "redux-saga";
+import rootSaga from "../sagas";
 
-const loggerMiddleware = ({ dispatch, getState }) => (next) => (action) => {
-    console.log(action);
-    return next(action);
-};
+const loggerMiddleware =
+    ({ dispatch, getState }) =>
+    (next) =>
+    (action) => {
+        console.log(action);
+        return next(action);
+    };
 
 const configureStore = () => {
     const sagaMiddleware = createSagaMiddleware();
     const middlewares = [sagaMiddleware, loggerMiddleware];
-    const enhancer = process.env.NODE_ENV === 'production'
-        //                      배열 그대로 넣으면 X
-        ? compose(applyMiddleware(...middlewares)) // 배포용
-        : composeWithDevTools(applyMiddleware(...middlewares)) // 개발용
+    const enhancer =
+        process.env.NODE_ENV === "production"
+            ? //                      배열 그대로 넣으면 X
+              compose(applyMiddleware(...sagaMiddleware)) // 배포용
+            : composeWithDevTools(applyMiddleware(...middlewares)); // 개발용
     const store = createStore(rootReducer, enhancer); // store: state, reducer를 포함
     store.sagaTask = sagaMiddleware.run(rootSaga);
     return store;
-}
+};
 
 const wrapper = createWrapper(configureStore, {
-    debug: process.env.NODE_ENV === 'development',
+    debug: process.env.NODE_ENV === "development",
 });
 
 export default wrapper;

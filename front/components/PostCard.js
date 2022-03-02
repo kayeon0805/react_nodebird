@@ -160,6 +160,7 @@ const PostCard = ({ post }) => {
                                     <Avatar>
                                         <Link
                                             href={`/user/${post.Retweet.User.id}`}
+                                            prefetch={false}
                                         >
                                             <a style={{ color: "white" }}>
                                                 {post.Retweet.User.nickname[0]}
@@ -183,7 +184,10 @@ const PostCard = ({ post }) => {
                             <Card.Meta
                                 avatar={
                                     <Avatar>
-                                        <Link href={`/user/${post.User.id}`}>
+                                        <Link
+                                            href={`/user/${post.User.id}`}
+                                            prefetch={false}
+                                        >
                                             <a style={{ color: "white" }}>
                                                 {post.User.nickname[0]}
                                             </a>
@@ -213,6 +217,7 @@ const PostCard = ({ post }) => {
                                             <Avatar>
                                                 <Link
                                                     href={`/user/${item.User.id}`}
+                                                    prefetch={false}
                                                 >
                                                     <a
                                                         style={{
