@@ -11,8 +11,8 @@ exports.handler = async (event, context, callback) => {
     const ext = Key.split(".")[Key.split(".").length - 1].toLowerCase();
     const requiredFormat = ext === "jpg" ? "jpeg" : ext;
     try {
-        console.log("테스트2");
         const s3Object = await s3.getObject({ Bucket, Key }).promise();
+        console.log("original", s3Object.Body.length);
         const resizedImage = await sharp(s3Object.Body)
             .resize(400, 400, {
                 fit: "inside",
@@ -26,7 +26,7 @@ exports.handler = async (event, context, callback) => {
                 Body: resizedImage,
             })
             .promise();
-        console.log("lambda 테스트", filename);
+        console.log("put", resizedImage.length);
         return callback(null, `thumb/${filename}`);
     } catch (error) {
         console.error(error);
