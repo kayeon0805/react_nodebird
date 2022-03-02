@@ -19,7 +19,7 @@ const configureStore = () => {
     const enhancer =
         process.env.NODE_ENV === "production"
             ? //                      배열 그대로 넣으면 X
-              compose(applyMiddleware(...sagaMiddleware)) // 배포용
+              compose(applyMiddleware(sagaMiddleware)) // 배포용
             : composeWithDevTools(applyMiddleware(...middlewares)); // 개발용
     const store = createStore(rootReducer, enhancer); // store: state, reducer를 포함
     store.sagaTask = sagaMiddleware.run(rootSaga);
