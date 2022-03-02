@@ -9,6 +9,7 @@ export const Overlay = styled.div`
     right: 0;
     bottom: 0;
 `;
+
 export const Header = styled.header`
     height: 44px;
     background: white;
@@ -44,9 +45,7 @@ export const ImgWrapper = styled.div`
 
     & img {
         margin: 0 auto;
-        width: 55%;
-        height: auto;
-        object-fit: cover;
+        max-height: 750px;
     }
 `;
 
@@ -67,10 +66,10 @@ export const Indicator = styled.div`
 `;
 
 export const Global = createGlobalStyle`
-    .slick-slide {
-        display: inline-block;
-    }
-    .ant-card-cover {
-        transform: none !important;
-    }
+  .slick-slide {
+    display: inline-block;
+  }
+  .ant-card-cover {
+    transform: none !important;
+  }
 `;
