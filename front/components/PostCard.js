@@ -113,13 +113,15 @@ const PostCard = ({ post }) => {
                                 <Button.Group>
                                     {id && post.User.id === id ? (
                                         <>
-                                            <Button
-                                                onClick={() =>
-                                                    onClickModifyPost(post)
-                                                }
-                                            >
-                                                수정
-                                            </Button>
+                                            {!post.RetweetId && (
+                                                <Button
+                                                    onClick={() =>
+                                                        onClickModifyPost(post)
+                                                    }
+                                                >
+                                                    수정
+                                                </Button>
+                                            )}
                                             <Button
                                                 type="danger"
                                                 loading={removePostLoading}
