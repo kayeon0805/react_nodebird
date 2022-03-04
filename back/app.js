@@ -26,6 +26,7 @@ db.sequelize
     .catch(console.error);
 
 passportConfig();
+app.set("trust proxy", 1);
 
 if (process.env.NODE_ENV === "production") {
     app.use(morgan("combined")); // 프론트 서버에서 백엔드 서버로 보낸 요청 확인 가능
@@ -33,7 +34,7 @@ if (process.env.NODE_ENV === "production") {
     app.use(helmet({ contentSecurityPolicy: false }));
     app.use(
         cors({
-            origin: ["http://nodebird.site", "http://www.nodebird.site"],
+            origin: ["https://nodebird.site", "http://www.nodebird.site"],
             credentials: true,
         })
     );
@@ -57,9 +58,10 @@ app.use(
         saveUninitialized: false,
         resave: false,
         secret: process.env.COOKIE_SECRET,
+        proxy: true,
         cookie: {
             httpOnly: true,
-            secure: false,
+            secure: true,
             domain: process.env.NODE_ENV === "production" && ".nodebird.site",
         },
     })
@@ -76,6 +78,6 @@ app.use("/posts", postsRouter);
 app.use("/user", userRouter);
 app.use("/hashtag", hashtagRouter);
 
-app.listen(80, () => {
+app.listen(3065, () => {
     console.log("서버 실행 중");
 });

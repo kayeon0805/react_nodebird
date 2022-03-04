@@ -1,3 +1,3 @@
 import React from "react";
 
-export const backUrl = "http://api.nodebird.site";
+export const backUrl = "https://api.nodebird.site";
