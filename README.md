@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-
 # react_nodebird
 
 ## Description
