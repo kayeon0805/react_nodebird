@@ -8,10 +8,7 @@ const ShowImages = ({ src, postId }) => {
     const onDeleteImage = useCallback(() => {
         dispatch({
             type: MODIFY_POST_REMOVE_IMAGE_REQUEST,
-            data: {
-                src,
-                postId,
-            },
+            data: src,
         });
         window.location.reload();
     }, []);
