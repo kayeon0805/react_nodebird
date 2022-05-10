@@ -94,7 +94,7 @@ https://nodebird.site/
 -   _moment_
     > 날짜 관련 작업 시 사용됩니다.
 -   _next_
-    > 서버사이드 렌더링 프레인 워크입니다.
+    > 서버사이드 렌더링 프레임 워크입니다.
 -   _next-redux-wrapper_
     > Next.js에서 Redux 사용을 쉽게 해주는 데에 사용됩니다.
 -   _pm2_

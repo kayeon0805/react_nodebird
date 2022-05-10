@@ -6,7 +6,7 @@ import useInput from "../hooks/useInput";
 import { MODIFY_POST_REQUEST, SHOW_IMAGE } from "../reducers/post";
 import Slider from "react-slick";
 import "moment/locale/ko";
-import ShowImages from "./ShowImages";
+import ShowImages from "./ShowImages.jsx";
 moment.locale("ko");
 
 const ModifyForm = ({ post, setModifyPost }) => {
