@@ -51,6 +51,7 @@ const ModifyForm = ({ post, setModifyPost }) => {
         infinite: true,
         // 넘어가는 속도는 몇으로 할 것인지
         speed: 500,
+        arrows: true,
         slidesToShow: 1,
         slidesToScroll: 1,
     };
