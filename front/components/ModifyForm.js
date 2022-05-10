@@ -22,7 +22,7 @@ const ModifyForm = ({ post, setModifyPost }) => {
             type: SHOW_IMAGE,
             data: post.Images,
         });
-    }, []);
+    }, [post]);
 
     const onsubmit = useCallback(() => {
         if (!text || !text.trim()) {
@@ -59,9 +59,14 @@ const ModifyForm = ({ post, setModifyPost }) => {
         <div style={{ marginBottom: 20 }}>
             <Card>
                 <Slider {...settings}>
-                    {modifyImagePaths.map((v, i) => (
-                        <ShowImages key={v.src} src={v.src} postId={post.id} />
-                    ))}
+                    {modifyImagePaths[0] &&
+                        modifyImagePaths.map((v, i) => (
+                            <ShowImages
+                                key={v.src}
+                                src={v.src}
+                                postId={post.id}
+                            />
+                        ))}
                 </Slider>
                 <div style={{ float: "right" }}>
                     {moment(post.createdAt).fromNow()}
