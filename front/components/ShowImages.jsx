@@ -11,7 +11,7 @@ const ShowImages = ({ src, postId }) => {
             data: src,
         });
         window.location.reload();
-    }, []);
+    }, [src]);
 
     return (
         <div style={{ marginTop: 20 }}>
