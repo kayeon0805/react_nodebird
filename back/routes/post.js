@@ -496,7 +496,9 @@ router.post("/search", async (req, res, next) => {
 // 이미지 삭제
 router.delete("/post/image", isLoggedIn, async (req, res, next) => {
     try {
-        await Post.removeImages(req.body.data);
+        await Image.destroy({
+            where: { src: req.body.data },
+        });
         res.status(200).json({ src: req.body.data });
     } catch (error) {
         console.error(error);
