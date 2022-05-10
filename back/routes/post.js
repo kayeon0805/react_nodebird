@@ -33,7 +33,6 @@ const upload = multer({
 // upload.none() => 오직 텍스트 필드만 허용
 router.post("/", isLoggedIn, upload.none(), async (req, res, next) => {
     try {
-        console.log(req.body.image);
         // ['#노드','#노드','#노드'] => 중복 방지
         const hashtags = Array.from(
             new Set(req.body.content.match(/#[^\s#]+/g))
@@ -454,8 +453,6 @@ router.delete("/:postId", isLoggedIn, async (req, res, next) => {
 // 검색
 router.post("/search", async (req, res, next) => {
     try {
-        console.log("왔어요");
-        console.log(req.body.search);
         const searchPost = await Post.findAll({
             where: {
                 content: {
@@ -490,6 +487,17 @@ router.post("/search", async (req, res, next) => {
             ],
         });
         res.status(200).json(searchPost);
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
+});
+
+// 이미지 삭제
+router.delete("/post/image", isLoggedIn, async (req, res, next) => {
+    try {
+        await Post.removeImages(req.body.data);
+        res.status(200).json({ src: req.body.data });
     } catch (error) {
         console.error(error);
         next(error);

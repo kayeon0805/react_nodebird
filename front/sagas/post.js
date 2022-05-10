@@ -23,6 +23,9 @@ import {
     LOAD_USER_POSTS_REQUEST,
     LOAD_USER_POSTS_SUCCESS,
     MODIFY_POST_FAILURE,
+    MODIFY_POST_REMOVE_IMAGE_FAILURE,
+    MODIFY_POST_REMOVE_IMAGE_REQUEST,
+    MODIFY_POST_REMOVE_IMAGE_SUCCESS,
     MODIFY_POST_REQUEST,
     MODIFY_POST_SUCCESS,
     REMOVE_POST_FAILURE,
@@ -308,7 +311,6 @@ function searchPostsAPI(data) {
 function* searchPosts(action) {
     try {
         const result = yield call(searchPostsAPI, action.data);
-        console.log("여기요~", result);
         yield put({
             type: SEARCH_INPUT_SUCCESS,
             data: result.data,
@@ -317,6 +319,26 @@ function* searchPosts(action) {
         console.error(err);
         yield put({
             type: SEARCH_INPUT_FAILURE,
+            error: err.response.data,
+        });
+    }
+}
+
+function modifyPostRemoveImageAPI(data) {
+    return axios.delete(`/post/image`, { data });
+}
+
+function* modifyPostRemoveImage(action) {
+    try {
+        const result = yield call(modifyPostRemoveImageAPI, action.data);
+        yield put({
+            type: MODIFY_POST_REMOVE_IMAGE_SUCCESS,
+            data: result.data,
+        });
+    } catch (err) {
+        console.error(err);
+        yield put({
+            type: MODIFY_POST_REMOVE_IMAGE_FAILURE,
             error: err.response.data,
         });
     }
@@ -374,6 +396,10 @@ function* watchSearchPosts() {
     yield takeLatest(SEARCH_INPUT_REQUEST, searchPosts);
 }
 
+function* watchModiFyPostRemoveImage() {
+    yield takeLatest(MODIFY_POST_REMOVE_IMAGE_REQUEST, modifyPostRemoveImage);
+}
+
 export default function* postSaga() {
     yield all([
         fork(watchRetweet),
@@ -389,5 +415,6 @@ export default function* postSaga() {
         fork(watchModiFyPost),
         fork(watchAddComment),
         fork(watchSearchPosts),
+        fork(watchModiFyPostRemoveImage),
     ]);
 }

@@ -4,7 +4,9 @@ import React, { useCallback, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import useInput from "../hooks/useInput";
 import { MODIFY_POST_REQUEST, SHOW_IMAGE } from "../reducers/post";
+import Slider from "react-slick";
 import "moment/locale/ko";
+import ShowImages from "./ShowImages";
 moment.locale("ko");
 
 const ModifyForm = ({ post, setModifyPost }) => {
@@ -42,18 +44,25 @@ const ModifyForm = ({ post, setModifyPost }) => {
         setModifyPost("");
     }, [text, post]);
 
+    const settings = {
+        // 캐러셀의 점을 보여줄 것인지
+        dots: true,
+        // 마지막 장 다음에 첫번째가 나오게 할 것인지
+        infinite: true,
+        // 넘어가는 속도는 몇으로 할 것인지
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+    };
+
     return (
         <div style={{ marginBottom: 20 }}>
             <Card>
-                {modifyImagePaths.map((v, i) => (
-                    <div key={v.src} style={{ display: "inline-block" }}>
-                        <img
-                            src={v.src}
-                            style={{ width: "200px" }}
-                            alt={v.src}
-                        />
-                    </div>
-                ))}
+                <Slider {...settings}>
+                    {modifyImagePaths.map((v, i) => (
+                        <ShowImages key={v.src} src={v.src} postId={post.id} />
+                    ))}
+                </Slider>
                 <div style={{ float: "right" }}>
                     {moment(post.createdAt).fromNow()}
                 </div>

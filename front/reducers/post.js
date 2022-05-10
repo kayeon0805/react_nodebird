@@ -40,6 +40,9 @@ export const initialState = {
     searchInputLoading: false,
     searchInputDone: false,
     searchInputError: null,
+    modifyPostRemoveImageLoading: false,
+    modifyPostRemoveImageDone: false,
+    modifyPostRemoveImageError: null,
 };
 
 export const UPLOAD_IMAGES_REQUEST = "UPLOAD_IMAGES_REQUEST";
@@ -98,6 +101,13 @@ export const REMOVE_IMAGE = "REMOVE_IMAGE";
 
 export const SHOW_IMAGE = "SHOW_IMAGE";
 
+export const MODIFY_POST_REMOVE_IMAGE_REQUEST =
+    "MODIFY_POST_REMOVE_IMAGE_REQUEST";
+export const MODIFY_POST_REMOVE_IMAGE_SUCCESS =
+    "MODIFY_POST_REMOVE_IMAGE_SUCCESS";
+export const MODIFY_POST_REMOVE_IMAGE_FAILURE =
+    "MODIFY_POST_REMOVE_IMAGE_FAILURE";
+
 export const addComment = (data) => ({
     type: ADD_COMMENT_REQUEST,
     data,
@@ -106,6 +116,23 @@ export const addComment = (data) => ({
 const reducer = (state = initialState, action) => {
     return produce(state, (draft) => {
         switch (action.type) {
+            case MODIFY_POST_REMOVE_IMAGE_REQUEST:
+                draft.modifyPostRemoveImageLoading = true;
+                draft.modifyPostRemoveImageDone = false;
+                draft.modifyPostRemoveImageError = null;
+                break;
+            case MODIFY_POST_REMOVE_IMAGE_SUCCESS:
+                draft.modifyPostRemoveImageLoading = false;
+                draft.modifyPostRemoveImageDone = true;
+                draft.imagePaths = draft.imagePaths.filter(
+                    (v, i) => v.src !== action.data
+                );
+                break;
+            case MODIFY_POST_REMOVE_IMAGE_FAILURE:
+                draft.modifyPostRemoveImageLoading = false;
+                draft.modifyPostRemoveImageDone = false;
+                draft.modifyPostRemoveImageError = action.error;
+                break;
             case SHOW_IMAGE:
                 draft.modifyImagePaths = action.data;
                 break;
