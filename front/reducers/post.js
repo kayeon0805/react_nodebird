@@ -125,7 +125,7 @@ const reducer = (state = initialState, action) => {
                 draft.modifyPostRemoveImageLoading = false;
                 draft.modifyPostRemoveImageDone = true;
                 draft.imagePaths = draft.imagePaths.filter(
-                    (v, i) => v.src !== action.data
+                    (v, i) => v.id !== action.data
                 );
                 break;
             case MODIFY_POST_REMOVE_IMAGE_FAILURE:

@@ -497,9 +497,9 @@ router.post("/search", async (req, res, next) => {
 router.delete("/post/image", isLoggedIn, async (req, res, next) => {
     try {
         await Image.destroy({
-            where: { src: req.body.data },
+            where: { id: parseInt(req.body.data) },
         });
-        res.status(200).json({ src: req.body.data });
+        res.status(200).json({ id: parseInt(req.body.data) });
     } catch (error) {
         console.error(error);
         next(error);
