@@ -52,6 +52,7 @@ const ModifyForm = ({ post, setModifyPost }) => {
         // 넘어가는 속도는 몇으로 할 것인지
         speed: 500,
         arrows: true,
+        vertical: false,
         slidesToShow: 1,
         slidesToScroll: 1,
     };
