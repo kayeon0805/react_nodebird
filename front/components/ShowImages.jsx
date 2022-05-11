@@ -3,17 +3,18 @@ import React, { useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { MODIFY_POST_REMOVE_IMAGE_REQUEST } from "../reducers/post";
 
-const ShowImages = ({ image }) => {
+const ShowImages = ({ image, postId }) => {
     const dispatch = useDispatch();
     const onDeleteImage = useCallback(() => {
         dispatch({
             type: MODIFY_POST_REMOVE_IMAGE_REQUEST,
             data: {
                 imageId: image.id,
+                postId: postId,
             },
         });
         window.location.reload();
-    }, [image]);
+    }, [image, postId]);
 
     return (
         <div style={{ marginTop: 20 }}>
