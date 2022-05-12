@@ -4,7 +4,6 @@ export const initialState = {
     mainPosts: [],
     searchPosts: [],
     imagePaths: [],
-    modifyImagePaths: [],
     singlePost: null,
     hasMorePosts: true,
     uploadImagesLoading: false,
@@ -125,7 +124,7 @@ const reducer = (state = initialState, action) => {
                 draft.modifyPostRemoveImageLoading = false;
                 draft.modifyPostRemoveImageDone = true;
                 draft.imagePaths = draft.imagePaths.filter(
-                    (v, i) => v.id !== action.data
+                    (v) => v.id !== action.data
                 );
                 break;
             case MODIFY_POST_REMOVE_IMAGE_FAILURE:
@@ -134,7 +133,7 @@ const reducer = (state = initialState, action) => {
                 draft.modifyPostRemoveImageError = action.error;
                 break;
             case SHOW_IMAGE:
-                draft.modifyImagePaths = action.data;
+                draft.imagePaths = action.data;
                 break;
             case REMOVE_IMAGE:
                 draft.imagePaths = draft.imagePaths.filter(

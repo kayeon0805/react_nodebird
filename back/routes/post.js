@@ -195,11 +195,11 @@ router.patch("/modify", isLoggedIn, async (req, res, next) => {
                 const images = await Promise.all(
                     req.body.image.map((image) => Image.create({ src: image }))
                 );
-                await post.addImages(images);
+                await post.setImages(images);
             } else {
                 // 하나만 올리면 image: 안녕.png
                 const image = await Image.create({ src: req.body.image });
-                await post.addImages(image);
+                await post.setImages(image);
             }
         }
         const fullPost = await Post.findOne({

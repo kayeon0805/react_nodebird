@@ -3,19 +3,23 @@ import moment from "moment";
 import React, { useCallback, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import useInput from "../hooks/useInput";
-import { MODIFY_POST_REQUEST, SHOW_IMAGE } from "../reducers/post";
+import {
+    MODIFY_POST_REQUEST,
+    SHOW_IMAGE,
+    UPLOAD_IMAGES_REQUEST,
+} from "../reducers/post";
 import Slider from "react-slick";
 import "moment/locale/ko";
 import ShowImages from "./ShowImages.jsx";
 moment.locale("ko");
 
 const ModifyForm = ({ post, setModifyPost }) => {
-    const { modifyImagePaths, modifyPostLoading } = useSelector(
+    const { imagePaths, modifyPostLoading } = useSelector(
         (state) => state.post
     );
     const [text, onChangeText, setText] = useInput(post.content);
     const dispatch = useDispatch();
-    const inputRef = useRef(null);
+    const imageInput = useRef();
 
     useEffect(() => {
         dispatch({
@@ -24,12 +28,30 @@ const ModifyForm = ({ post, setModifyPost }) => {
         });
     }, [post]);
 
+    const onClickImageUpload = useCallback(() => {
+        imageInput.current.click();
+    }, [imageInput.current]);
+
+    const onchangeImages = useCallback((e) => {
+        const imageFormData = new FormData();
+        // FormData를 배열로 만들기 위함.
+        // e.target.files => 유사배열 / f => 배열의 원소
+        [].forEach.call(e.target.files, (f) => {
+            // routes/post => upload.array('image') 이름 맞춰줘야 함.
+            imageFormData.append("image", f);
+        });
+        dispatch({
+            type: UPLOAD_IMAGES_REQUEST,
+            data: imageFormData,
+        });
+    }, []);
+
     const onsubmit = useCallback(() => {
         if (!text || !text.trim()) {
             return alert("게시글을 작성하세요.");
         }
         const formData = new FormData();
-        modifyImagePaths.forEach((p) => {
+        imagePaths.forEach((p) => {
             formData.append("image", p);
         });
         formData.append("content", text);
@@ -61,8 +83,8 @@ const ModifyForm = ({ post, setModifyPost }) => {
         <div style={{ marginBottom: 20 }}>
             <Card>
                 <Slider {...settings}>
-                    {modifyImagePaths[0] &&
-                        modifyImagePaths.map((v, i) => (
+                    {imagePaths[0] &&
+                        imagePaths.map((v, i) => (
                             <ShowImages
                                 key={v.src}
                                 image={v}
@@ -84,8 +106,19 @@ const ModifyForm = ({ post, setModifyPost }) => {
                                 value={text}
                                 onChange={onChangeText}
                                 maxLength={140}
-                                ref={inputRef}
                             />
+                            <input
+                                type="file"
+                                name="image"
+                                multiple
+                                hidden
+                                ref={imageInput}
+                                onChange={onchangeImages}
+                                accept="image/*"
+                            />
+                            <Button onClick={onClickImageUpload}>
+                                이미지 업로드
+                            </Button>
                             <div style={{ marginBottom: 40 }}>
                                 <Button
                                     type="primary"

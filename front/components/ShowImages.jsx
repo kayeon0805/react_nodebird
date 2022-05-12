@@ -13,7 +13,6 @@ const ShowImages = ({ image, postId }) => {
                 postId: postId,
             },
         });
-        window.location.reload();
     }, [image, postId]);
 
     return (
