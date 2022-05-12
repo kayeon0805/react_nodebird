@@ -325,7 +325,7 @@ function* searchPosts(action) {
 }
 
 function modifyPostRemoveImageAPI(data) {
-    return axios.delete(`/post/image`, data);
+    return axios.post(`/post/image`, data);
 }
 
 function* modifyPostRemoveImage(action) {
