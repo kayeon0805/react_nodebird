@@ -496,10 +496,15 @@ router.post("/search", async (req, res, next) => {
 // 이미지 삭제
 router.post("/image", isLoggedIn, async (req, res, next) => {
     try {
-        await Image.destroy({
-            where: { id: parseInt(req.body.imageId) },
+        const post = await Post.findOne({
+            where: { id: req.body.postId },
         });
-        res.status(200).json({ id: parseInt(req.body.imageId) });
+        if (!post) {
+            return res.status(403).send(" 게시글이 존재하지 않습니다.");
+        }
+        const image = await Image.findOne({ where: { id: req.body.imageId } });
+        await post.removeImages(image);
+        res.status(200).json(image.id);
     } catch (error) {
         console.error(error);
         next(error);

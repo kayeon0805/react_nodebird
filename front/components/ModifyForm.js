@@ -63,7 +63,11 @@ const ModifyForm = ({ post, setModifyPost }) => {
                 <Slider {...settings}>
                     {modifyImagePaths[0] &&
                         modifyImagePaths.map((v, i) => (
-                            <ShowImages key={v.src} image={v} />
+                            <ShowImages
+                                key={v.src}
+                                image={v}
+                                postId={post.id}
+                            />
                         ))}
                 </Slider>
                 <div style={{ float: "right" }}>
