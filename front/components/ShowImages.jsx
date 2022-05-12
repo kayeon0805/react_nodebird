@@ -19,7 +19,7 @@ const ShowImages = ({ image, postId }) => {
         <div style={{ marginTop: 20 }}>
             <img
                 style={{ height: 300 }}
-                src={`${image.src.replace(/\/original\//, "/thumb/")}`}
+                src={image.src.replace(/\/original\//, "/thumb/")}
             />
             <div style={{ textAlign: "right" }}>
                 <Button onClick={onDeleteImage}>사진 삭제</Button>
