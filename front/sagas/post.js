@@ -28,7 +28,9 @@ import {
     MODIFY_POST_REMOVE_IMAGE_SUCCESS,
     MODIFY_POST_REQUEST,
     MODIFY_POST_SUCCESS,
+    POST_MODIFY_UPLOAD_IMAGES_FAILURE,
     POST_MODIFY_UPLOAD_IMAGES_REQUEST,
+    POST_MODIFY_UPLOAD_IMAGES_SUCCESS,
     REMOVE_POST_FAILURE,
     REMOVE_POST_REQUEST,
     REMOVE_POST_SUCCESS,
@@ -82,6 +84,22 @@ function* uploadImages(action) {
         console.error(err);
         yield put({
             type: UPLOAD_IMAGES_FAILURE,
+            error: err.response.data,
+        });
+    }
+}
+
+function* modifyPostuploadImages(action) {
+    try {
+        const result = yield call(uploadImagesAPI, action.data);
+        yield put({
+            type: POST_MODIFY_UPLOAD_IMAGES_SUCCESS,
+            data: result.data,
+        });
+    } catch (err) {
+        console.error(err);
+        yield put({
+            type: POST_MODIFY_UPLOAD_IMAGES_FAILURE,
             error: err.response.data,
         });
     }
@@ -347,7 +365,7 @@ function* watchUploadImages() {
 }
 
 function* watchModifyPostUploadImages() {
-    yield takeLatest(POST_MODIFY_UPLOAD_IMAGES_REQUEST, uploadImages);
+    yield takeLatest(POST_MODIFY_UPLOAD_IMAGES_REQUEST, modifyPostuploadImages);
 }
 
 function* watchLikePost() {
