@@ -3,7 +3,10 @@ import moment from "moment";
 import React, { useCallback, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import useInput from "../hooks/useInput";
-import { MODIFY_POST_REQUEST, UPLOAD_IMAGES_REQUEST } from "../reducers/post";
+import {
+    MODIFY_POST_REQUEST,
+    POST_MODIFY_UPLOAD_IMAGES_REQUEST,
+} from "../reducers/post";
 import Slider from "react-slick";
 import "moment/locale/ko";
 import ShowImages from "./ShowImages.jsx";
@@ -30,7 +33,7 @@ const ModifyForm = ({ post, setModifyPost }) => {
             imageFormData.append("image", f);
         });
         dispatch({
-            type: UPLOAD_IMAGES_REQUEST,
+            type: POST_MODIFY_UPLOAD_IMAGES_REQUEST,
             data: imageFormData,
         });
     }, []);

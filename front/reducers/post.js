@@ -89,6 +89,13 @@ export const MODIFY_POST_REQUEST = "MODIFY_POST_REQUEST";
 export const MODIFY_POST_SUCCESS = "MODIFY_POST_SUCCESS";
 export const MODIFY_POST_FAILURE = "MODIFY_POST_FAILURE";
 
+export const POST_MODIFY_UPLOAD_IMAGES_REQUEST =
+    "POST_MODIFY_UPLOAD_IMAGES_REQUEST";
+export const POST_MODIFY_UPLOAD_IMAGES_SUCCESS =
+    "POST_MODIFY_UPLOAD_IMAGES_SUCCESS";
+export const POST_MODIFY_UPLOAD_IMAGES_FAILURE =
+    "POST_MODIFY_UPLOAD_IMAGES_FAILURE";
+
 export const RETWEET_REQUEST = "RETWEET_REQUEST";
 export const RETWEET_SUCCESS = "RETWEET_SUCCESS";
 export const RETWEET_FAILURE = "RETWEET_FAILURE";
@@ -183,6 +190,23 @@ const reducer = (state = initialState, action) => {
                 break;
             }
             case UPLOAD_IMAGES_FAILURE:
+                draft.uploadImagesLoading = false;
+                draft.uploadImagesError = action.error;
+                break;
+            case POST_MODIFY_UPLOAD_IMAGES_REQUEST:
+                draft.uploadImagesLoading = true;
+                draft.uploadImagesDone = false;
+                draft.uploadImagesError = null;
+                break;
+            case POST_MODIFY_UPLOAD_IMAGES_SUCCESS: {
+                draft.modifyImagePaths = draft.modifyImagePaths.concat(
+                    action.data
+                );
+                draft.uploadImagesLoading = false;
+                draft.uploadImagesDone = true;
+                break;
+            }
+            case POST_MODIFY_UPLOAD_IMAGES_FAILURE:
                 draft.uploadImagesLoading = false;
                 draft.uploadImagesError = action.error;
                 break;

@@ -28,6 +28,7 @@ import {
     MODIFY_POST_REMOVE_IMAGE_SUCCESS,
     MODIFY_POST_REQUEST,
     MODIFY_POST_SUCCESS,
+    POST_MODIFY_UPLOAD_IMAGES_REQUEST,
     REMOVE_POST_FAILURE,
     REMOVE_POST_REQUEST,
     REMOVE_POST_SUCCESS,
@@ -348,6 +349,10 @@ function* watchUploadImages() {
     yield takeLatest(UPLOAD_IMAGES_REQUEST, uploadImages);
 }
 
+function* watchModifyPostUploadImages() {
+    yield takeLatest(POST_MODIFY_UPLOAD_IMAGES_REQUEST, uploadImages);
+}
+
 function* watchLikePost() {
     yield takeLatest(LIKE_POST_REQUEST, likePost);
 }
@@ -416,5 +421,6 @@ export default function* postSaga() {
         fork(watchAddComment),
         fork(watchSearchPosts),
         fork(watchModiFyPostRemoveImage),
+        fork(watchModifyPostUploadImages),
     ]);
 }
