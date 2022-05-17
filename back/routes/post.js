@@ -144,7 +144,7 @@ router.post("/:postId/comment", isLoggedIn, async (req, res, next) => {
 });
 
 // 게시글 수정
-router.patch("/modify", isLoggedIn, async (req, res, next) => {
+router.post("/modify", isLoggedIn, async (req, res, next) => {
     const { postId } = req.body;
     const { content } = req.body;
     try {
