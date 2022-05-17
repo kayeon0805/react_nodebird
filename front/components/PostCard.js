@@ -17,6 +17,7 @@ import {
     LIKE_POST_REQUEST,
     UNLIKE_POST_REQUEST,
     RETWEET_REQUEST,
+    SHOW_IMAGE,
 } from "../reducers/post";
 import FollowButton from "./FollowButton";
 import Link from "next/link";
@@ -77,6 +78,12 @@ const PostCard = ({ post }) => {
     }, [id]);
 
     const onClickModifyPost = useCallback((post) => {
+        if (post.Images[0]) {
+            dispatch({
+                type: SHOW_IMAGE,
+                data: post.Images,
+            });
+        }
         setModifyPost(post);
     }, []);
 

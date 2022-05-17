@@ -3,11 +3,7 @@ import moment from "moment";
 import React, { useCallback, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import useInput from "../hooks/useInput";
-import {
-    MODIFY_POST_REQUEST,
-    SHOW_IMAGE,
-    UPLOAD_IMAGES_REQUEST,
-} from "../reducers/post";
+import { MODIFY_POST_REQUEST, UPLOAD_IMAGES_REQUEST } from "../reducers/post";
 import Slider from "react-slick";
 import "moment/locale/ko";
 import ShowImages from "./ShowImages.jsx";
@@ -20,13 +16,6 @@ const ModifyForm = ({ post, setModifyPost }) => {
     const [text, onChangeText, setText] = useInput(post.content);
     const dispatch = useDispatch();
     const imageInput = useRef();
-
-    useEffect(() => {
-        dispatch({
-            type: SHOW_IMAGE,
-            data: post.Images,
-        });
-    }, [post]);
 
     const onClickImageUpload = useCallback(() => {
         imageInput.current.click();
