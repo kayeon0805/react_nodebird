@@ -13,7 +13,7 @@ import ShowImages from "./ShowImages.jsx";
 moment.locale("ko");
 
 const ModifyForm = ({ post, setModifyPost }) => {
-    const { imagePaths, modifyPostLoading } = useSelector(
+    const { modifyImagePaths, modifyPostLoading } = useSelector(
         (state) => state.post
     );
     const [text, onChangeText, setText] = useInput(post.content);
@@ -43,7 +43,7 @@ const ModifyForm = ({ post, setModifyPost }) => {
             return alert("게시글을 작성하세요.");
         }
         const formData = new FormData();
-        imagePaths.forEach((p) => {
+        modifyImagePaths.forEach((p) => {
             formData.append("image", p);
         });
         formData.append("content", text);
@@ -75,8 +75,8 @@ const ModifyForm = ({ post, setModifyPost }) => {
         <div style={{ marginBottom: 20 }}>
             <Card>
                 <Slider {...settings}>
-                    {imagePaths[0] &&
-                        imagePaths.map((v, i) => (
+                    {modifyImagePaths[0] &&
+                        modifyImagePaths.map((v, i) => (
                             <ShowImages
                                 key={v.src}
                                 image={v}
