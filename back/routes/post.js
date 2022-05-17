@@ -154,6 +154,7 @@ router.patch("/modify", isLoggedIn, async (req, res, next) => {
         if (!post) {
             return res.status(404).send("존재하지 않는 게시글입니다.");
         }
+
         // 수정 전 해시태그 지우기
         const exHashtags = Array.from(new Set(post.content.match(/#[^\s#]+/g)));
         if (exHashtags) {

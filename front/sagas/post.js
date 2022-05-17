@@ -263,10 +263,7 @@ function* removePost(action) {
 }
 
 function modifyPostAPI(data) {
-    return axios.patch(`/post/modify`, {
-        postId: data.postId,
-        content: data.content,
-    });
+    return axios.patch(`/post/modify`, data);
 }
 
 function* modifyPost(action) {
