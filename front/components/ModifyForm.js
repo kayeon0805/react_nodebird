@@ -48,7 +48,7 @@ const ModifyForm = ({ post, setModifyPost }) => {
             type: MODIFY_POST_REQUEST,
             data: {
                 postId: post.id,
-                content: text,
+                data: formData,
             },
         });
         setText("");
