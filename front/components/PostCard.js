@@ -78,10 +78,10 @@ const PostCard = ({ post }) => {
     }, [id]);
 
     const onClickModifyPost = useCallback((post) => {
-        if (post.Images[0]) {
+        if (post.Images.length > 0) {
             dispatch({
                 type: SHOW_IMAGE,
-                data: post.Images,
+                data: post.Images.map((v) => v.src),
             });
         }
         setModifyPost(post);
