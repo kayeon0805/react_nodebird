@@ -1,6 +1,6 @@
 import { Button, Card, Form, Input } from "antd";
 import moment from "moment";
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useCallback, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import useInput from "../hooks/useInput";
 import {
@@ -10,7 +10,17 @@ import {
 import Slider from "react-slick";
 import "moment/locale/ko";
 import ShowImages from "./ShowImages.jsx";
+import styled from "styled-components";
 moment.locale("ko");
+
+const WrapperCard = styled(Card)`
+    .slick-prev:before {
+        color: black;
+    }
+    .slick-next:before {
+        color: black;
+    }
+`;
 
 const ModifyForm = ({ post, setModifyPost }) => {
     const { modifyImagePaths, modifyPostLoading } = useSelector(
@@ -73,7 +83,7 @@ const ModifyForm = ({ post, setModifyPost }) => {
 
     return (
         <div style={{ marginBottom: 20 }}>
-            <Card>
+            <WrapperCard>
                 <Slider {...settings}>
                     {modifyImagePaths.length > 0 &&
                         modifyImagePaths.map((v, i) => (
@@ -124,7 +134,7 @@ const ModifyForm = ({ post, setModifyPost }) => {
                         </Form>
                     }
                 />
-            </Card>
+            </WrapperCard>
         </div>
     );
 };

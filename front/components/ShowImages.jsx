@@ -9,16 +9,23 @@ const ShowImages = ({ image, postId }) => {
         dispatch({
             type: MODIFY_POST_REMOVE_IMAGE_REQUEST,
             data: {
-                imageId: image.id,
+                image: image,
                 postId: postId,
             },
         });
     }, [image, postId]);
 
     return (
-        <div style={{ marginTop: 20 }}>
-            <img style={{ height: 300 }} src={image.src} />
-            <div style={{ textAlign: "right" }}>
+        <div
+            style={{
+                marginTop: 20,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+            }}
+        >
+            <img style={{ width: 200 }} src={image} />
+            <div style={{ display: "flex", alignSelf: "flex-end" }}>
                 <Button onClick={onDeleteImage}>사진 삭제</Button>
             </div>
         </div>
