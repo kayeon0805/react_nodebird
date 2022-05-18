@@ -92,7 +92,6 @@ function* uploadImages(action) {
 function* modifyPostuploadImages(action) {
     try {
         const result = yield call(uploadImagesAPI, action.data);
-        console.log(result);
         yield put({
             type: POST_MODIFY_UPLOAD_IMAGES_SUCCESS,
             data: result.data,
