@@ -26,6 +26,7 @@ const ModifyForm = ({ post, setModifyPost }) => {
     const { modifyImagePaths, modifyPostLoading } = useSelector(
         (state) => state.post
     );
+
     const [text, onChangeText, setText] = useInput(post.content);
     const dispatch = useDispatch();
     const imageInput = useRef();
@@ -87,11 +88,7 @@ const ModifyForm = ({ post, setModifyPost }) => {
                 <Slider {...settings}>
                     {modifyImagePaths.length > 0 &&
                         modifyImagePaths.map((v, i) => (
-                            <ShowImages
-                                key={v.src}
-                                image={v}
-                                postId={post.id}
-                            />
+                            <ShowImages key={v} image={v} postId={post.id} />
                         ))}
                 </Slider>
                 <div style={{ float: "right" }}>
