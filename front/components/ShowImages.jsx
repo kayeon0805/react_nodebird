@@ -30,7 +30,10 @@ const ShowImages = ({ image, postId, removeModifyImagePaths }) => {
                 alignItems: "center",
             }}
         >
-            <img style={{ width: 200 }} src={image} />
+            <img
+                style={{ width: 200 }}
+                src={image.replace(/\/thumb\//, "/original/")}
+            />
             <div style={{ display: "flex", alignSelf: "flex-end" }}>
                 <Button onClick={onDeleteImage}>사진 삭제</Button>
             </div>
