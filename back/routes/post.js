@@ -494,6 +494,28 @@ router.post("/search", async (req, res, next) => {
     }
 });
 
+// 이미지 존재 여부
+router.get("/image:postId", isLoggedIn, async (req, res, next) => {
+    try {
+        const post = await Post.findOne({
+            where: { id: req.params.postId },
+        });
+        if (!post) {
+            return res.status(403).send(" 게시글이 존재하지 않습니다.");
+        }
+        const image = await Image.findOne({
+            where: { src: req.query.image, postId: post.id },
+        });
+        if (!image) {
+            return res.status(200).send(false);
+        }
+        return res.status(200).send(true);
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
+});
+
 // 이미지 삭제
 router.post("/image", isLoggedIn, async (req, res, next) => {
     try {

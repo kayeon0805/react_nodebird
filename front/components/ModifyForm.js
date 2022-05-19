@@ -1,16 +1,14 @@
 import { Button, Card, Form, Input } from "antd";
 import moment from "moment";
-import React, { useCallback, useRef } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import useInput from "../hooks/useInput";
-import {
-    MODIFY_POST_REQUEST,
-    POST_MODIFY_UPLOAD_IMAGES_REQUEST,
-} from "../reducers/post";
+import { MODIFY_POST_REQUEST } from "../reducers/post";
 import Slider from "react-slick";
 import "moment/locale/ko";
 import ShowImages from "./ShowImages.jsx";
 import styled from "styled-components";
+import axios from "axios";
 moment.locale("ko");
 
 const WrapperCard = styled(Card)`
@@ -23,10 +21,11 @@ const WrapperCard = styled(Card)`
 `;
 
 const ModifyForm = ({ post, setModifyPost }) => {
-    const { modifyImagePaths, modifyPostLoading } = useSelector(
-        (state) => state.post
-    );
-
+    const imageSrc = useCallback(() => {
+        return post.Images.map((v) => v.src);
+    }, [post]);
+    const { modifyPostLoading } = useSelector((state) => state.post);
+    const [modifyImagePaths, setModifyImagePaths] = useState(imageSrc);
     const [text, onChangeText, setText] = useInput(post.content);
     const dispatch = useDispatch();
     const imageInput = useRef();
@@ -35,19 +34,28 @@ const ModifyForm = ({ post, setModifyPost }) => {
         imageInput.current.click();
     }, [imageInput.current]);
 
-    const onchangeImages = useCallback((e) => {
-        const imageFormData = new FormData();
-        // FormData를 배열로 만들기 위함.
-        // e.target.files => 유사배열 / f => 배열의 원소
-        [].forEach.call(e.target.files, (f) => {
-            // routes/post => upload.array('image') 이름 맞춰줘야 함.
-            imageFormData.append("image", f);
-        });
-        dispatch({
-            type: POST_MODIFY_UPLOAD_IMAGES_REQUEST,
-            data: imageFormData,
-        });
-    }, []);
+    const onchangeImages = useCallback(
+        async (e) => {
+            const imageFormData = new FormData();
+            // FormData를 배열로 만들기 위함.
+            // e.target.files => 유사배열 / f => 배열의 원소
+            [].forEach.call(e.target.files, (f) => {
+                // routes/post => upload.array('image') 이름 맞춰줘야 함.
+                imageFormData.append("image", f);
+            });
+            await axios.post(`/post/images`, imageFormData).then((response) => {
+                setModifyImagePaths([...modifyImagePaths, response]);
+            });
+        },
+        [modifyImagePaths]
+    );
+
+    const removeModifyImagePaths = useCallback(
+        (image) => {
+            setModifyImagePaths(modifyImagePaths.filter((v) => v !== image));
+        },
+        [modifyImagePaths]
+    );
 
     const onsubmit = useCallback(() => {
         if (!text || !text.trim()) {
@@ -86,9 +94,14 @@ const ModifyForm = ({ post, setModifyPost }) => {
         <div style={{ marginBottom: 20 }}>
             <WrapperCard>
                 <Slider {...settings}>
-                    {modifyImagePaths.length > 0 &&
-                        modifyImagePaths.map((v, i) => (
-                            <ShowImages key={v} image={v} postId={post.id} />
+                    {post.Images.length > 0 &&
+                        post.Images.map((v, i) => (
+                            <ShowImages
+                                key={v.src}
+                                image={v.src}
+                                postId={post.id}
+                                removeModifyImagePaths={removeModifyImagePaths}
+                            />
                         ))}
                 </Slider>
                 <div style={{ float: "right" }}>

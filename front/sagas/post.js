@@ -23,14 +23,8 @@ import {
     LOAD_USER_POSTS_REQUEST,
     LOAD_USER_POSTS_SUCCESS,
     MODIFY_POST_FAILURE,
-    MODIFY_POST_REMOVE_IMAGE_FAILURE,
-    MODIFY_POST_REMOVE_IMAGE_REQUEST,
-    MODIFY_POST_REMOVE_IMAGE_SUCCESS,
     MODIFY_POST_REQUEST,
     MODIFY_POST_SUCCESS,
-    POST_MODIFY_UPLOAD_IMAGES_FAILURE,
-    POST_MODIFY_UPLOAD_IMAGES_REQUEST,
-    POST_MODIFY_UPLOAD_IMAGES_SUCCESS,
     REMOVE_POST_FAILURE,
     REMOVE_POST_REQUEST,
     REMOVE_POST_SUCCESS,
@@ -84,22 +78,6 @@ function* uploadImages(action) {
         console.error(err);
         yield put({
             type: UPLOAD_IMAGES_FAILURE,
-            error: err.response.data,
-        });
-    }
-}
-
-function* modifyPostuploadImages(action) {
-    try {
-        const result = yield call(uploadImagesAPI, action.data);
-        yield put({
-            type: POST_MODIFY_UPLOAD_IMAGES_SUCCESS,
-            data: result.data,
-        });
-    } catch (err) {
-        console.error(err);
-        yield put({
-            type: POST_MODIFY_UPLOAD_IMAGES_FAILURE,
             error: err.response.data,
         });
     }
@@ -340,32 +318,8 @@ function* searchPosts(action) {
     }
 }
 
-function modifyPostRemoveImageAPI(data) {
-    return axios.post(`/post/image`, data);
-}
-
-function* modifyPostRemoveImage(action) {
-    try {
-        const result = yield call(modifyPostRemoveImageAPI, action.data);
-        yield put({
-            type: MODIFY_POST_REMOVE_IMAGE_SUCCESS,
-            data: result.data,
-        });
-    } catch (err) {
-        console.error(err);
-        yield put({
-            type: MODIFY_POST_REMOVE_IMAGE_FAILURE,
-            error: err.response.data,
-        });
-    }
-}
-
 function* watchUploadImages() {
     yield takeLatest(UPLOAD_IMAGES_REQUEST, uploadImages);
-}
-
-function* watchModifyPostUploadImages() {
-    yield takeLatest(POST_MODIFY_UPLOAD_IMAGES_REQUEST, modifyPostuploadImages);
 }
 
 function* watchLikePost() {
@@ -416,10 +370,6 @@ function* watchSearchPosts() {
     yield takeLatest(SEARCH_INPUT_REQUEST, searchPosts);
 }
 
-function* watchModiFyPostRemoveImage() {
-    yield takeLatest(MODIFY_POST_REMOVE_IMAGE_REQUEST, modifyPostRemoveImage);
-}
-
 export default function* postSaga() {
     yield all([
         fork(watchRetweet),
@@ -435,7 +385,5 @@ export default function* postSaga() {
         fork(watchModiFyPost),
         fork(watchAddComment),
         fork(watchSearchPosts),
-        fork(watchModiFyPostRemoveImage),
-        fork(watchModifyPostUploadImages),
     ]);
 }

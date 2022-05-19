@@ -1,18 +1,20 @@
 import { Button } from "antd";
+import axios from "axios";
 import React, { useCallback } from "react";
-import { useDispatch } from "react-redux";
-import { MODIFY_POST_REMOVE_IMAGE_REQUEST } from "../reducers/post";
 
-const ShowImages = ({ image, postId }) => {
-    const dispatch = useDispatch();
-    const onDeleteImage = useCallback(() => {
-        dispatch({
-            type: MODIFY_POST_REMOVE_IMAGE_REQUEST,
-            data: {
-                image: image,
-                postId: postId,
-            },
-        });
+const ShowImages = ({ image, postId, removeModifyImagePaths }) => {
+    const onDeleteImage = useCallback(async () => {
+        await axios
+            .post(`/post/image/${postId}?image${image}`)
+            .then((response) => {
+                if (response) {
+                    // 이미 게시글에 추가된 이미지를 삭제할 경우
+                    axios.post("/post/image", { image: image, postId: postId });
+                } else {
+                    // 아직 게시글에 추가되지 않은 이미지를 삭제할 경우
+                    removeModifyImagePaths(image);
+                }
+            });
     }, [image, postId]);
 
     return (
