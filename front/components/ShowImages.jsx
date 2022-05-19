@@ -3,7 +3,12 @@ import axios from "axios";
 import React, { useCallback } from "react";
 import { backUrl } from "../config/config";
 
-const ShowImages = ({ image, postId, removeModifyImagePaths }) => {
+const ShowImages = ({
+    image,
+    postId,
+    removeModifyImagePaths,
+    setModifyImagePaths,
+}) => {
     const onDeleteImage = useCallback(async () => {
         await axios
             .post(`${backUrl}/post/${postId}/image`, encodeURI(image))
@@ -14,6 +19,7 @@ const ShowImages = ({ image, postId, removeModifyImagePaths }) => {
                         image: image,
                         postId: postId,
                     });
+                    setModifyImagePaths([]);
                 } else {
                     // 아직 게시글에 추가되지 않은 이미지를 삭제할 경우
                     removeModifyImagePaths(image);

@@ -107,6 +107,7 @@ const ModifyForm = ({ post, setModifyPost }) => {
                                 image={v}
                                 postId={post.id}
                                 removeModifyImagePaths={removeModifyImagePaths}
+                                setModifyImagePaths={setModifyImagePaths}
                             />
                         ))}
                 </Slider>
