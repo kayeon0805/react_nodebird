@@ -80,7 +80,8 @@ const ModifyForm = ({ post, setModifyPost }) => {
         });
         setText("");
         setModifyPost("");
-    }, [text, post]);
+        window, location.reload();
+    }, [text, post, modifyImagePaths]);
 
     const settings = {
         // 캐러셀의 점을 보여줄 것인지

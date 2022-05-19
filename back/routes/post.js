@@ -144,7 +144,7 @@ router.post("/:postId/comment", isLoggedIn, async (req, res, next) => {
 });
 
 // 게시글 수정
-router.post("/modify", isLoggedIn, async (req, res, next) => {
+router.post("/modify", isLoggedIn, upload.none(), async (req, res, next) => {
     try {
         const post = await Post.findOne({
             where: { id: req.body.postId },
