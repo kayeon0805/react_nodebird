@@ -495,7 +495,7 @@ router.post("/search", async (req, res, next) => {
 });
 
 // 이미지 존재 여부
-router.get("/:postId/image", isLoggedIn, async (req, res, next) => {
+router.post("/:postId/image", isLoggedIn, async (req, res, next) => {
     try {
         const post = await Post.findOne({
             where: { id: req.params.postId },
@@ -504,7 +504,7 @@ router.get("/:postId/image", isLoggedIn, async (req, res, next) => {
             return res.status(403).send(" 게시글이 존재하지 않습니다.");
         }
         const image = await Image.findOne({
-            where: { src: req.query.src, postId: post.id },
+            where: { src: req.body.image, postId: post.id },
         });
         if (!image) {
             return res.status(200).send(false);

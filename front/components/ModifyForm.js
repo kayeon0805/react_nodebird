@@ -80,7 +80,7 @@ const ModifyForm = ({ post, setModifyPost }) => {
         });
         setText("");
         setModifyPost("");
-        window, location.reload();
+        window.location.reload();
     }, [text, post, modifyImagePaths]);
 
     const settings = {
