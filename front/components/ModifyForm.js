@@ -47,7 +47,10 @@ const ModifyForm = ({ post, setModifyPost }) => {
             await axios
                 .post(`${backUrl}/post/images`, imageFormData)
                 .then((response) => {
-                    setModifyImagePaths([...modifyImagePaths, response.data]);
+                    setModifyImagePaths([
+                        ...modifyImagePaths,
+                        ...response.data,
+                    ]);
                 });
         },
         [modifyImagePaths]
