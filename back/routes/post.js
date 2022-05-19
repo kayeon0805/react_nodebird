@@ -525,7 +525,9 @@ router.post("/image", isLoggedIn, async (req, res, next) => {
         if (!post) {
             return res.status(403).send(" 게시글이 존재하지 않습니다.");
         }
-        const image = await Image.findOne({ where: { src: req.body.image } });
+        const image = await Image.findOne({
+            where: { src: req.body.image, postId: req.body.postId },
+        });
         await post.removeImages(image);
         res.status(200).json(image.src);
     } catch (error) {

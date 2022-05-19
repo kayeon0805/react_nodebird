@@ -8,7 +8,7 @@ const ShowImages = ({ image, postId, removeModifyImagePaths }) => {
         await axios
             .get(`${backUrl}/post/${postId}/image?src=${image}`)
             .then((response) => {
-                if (response) {
+                if (response.data) {
                     // 이미 게시글에 추가된 이미지를 삭제할 경우
                     axios.post(`${backUrl}/post/image`, {
                         image: image,
