@@ -104,8 +104,8 @@ const ModifyForm = ({ post, setModifyPost }) => {
                     {modifyImagePaths.length > 0 &&
                         modifyImagePaths.map((v, i) => (
                             <ShowImages
-                                key={v.src}
-                                image={v.src}
+                                key={v}
+                                image={v}
                                 postId={post.id}
                                 removeModifyImagePaths={removeModifyImagePaths}
                             />
