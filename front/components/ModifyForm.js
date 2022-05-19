@@ -6,6 +6,7 @@ import useInput from "../hooks/useInput";
 import { MODIFY_POST_REQUEST } from "../reducers/post";
 import Slider from "react-slick";
 import "moment/locale/ko";
+import { backUrl } from "../config/config";
 import ShowImages from "./ShowImages.jsx";
 import styled from "styled-components";
 import axios from "axios";
@@ -43,9 +44,11 @@ const ModifyForm = ({ post, setModifyPost }) => {
                 // routes/post => upload.array('image') 이름 맞춰줘야 함.
                 imageFormData.append("image", f);
             });
-            await axios.post(`/post/images`, imageFormData).then((response) => {
-                setModifyImagePaths([...modifyImagePaths, response]);
-            });
+            await axios
+                .post(`${backUrl}/post/images`, imageFormData)
+                .then((response) => {
+                    setModifyImagePaths([...modifyImagePaths, response]);
+                });
         },
         [modifyImagePaths]
     );
