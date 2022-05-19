@@ -39,6 +39,7 @@ const ModifyForm = ({ post, setModifyPost }) => {
 
     useEffect(() => {
         if (modifyPostDone) {
+            setModifyPost("");
             window.location.reload();
         }
     }, [modifyPostDone]);
@@ -67,7 +68,6 @@ const ModifyForm = ({ post, setModifyPost }) => {
     const removeModifyImagePaths = useCallback(
         (image) => {
             setModifyImagePaths(modifyImagePaths.filter((v) => v !== image));
-            window.location.reload();
         },
         [modifyImagePaths]
     );
@@ -87,7 +87,6 @@ const ModifyForm = ({ post, setModifyPost }) => {
             data: formData,
         });
         setText("");
-        setModifyPost("");
     }, [text, post, modifyImagePaths]);
 
     const settings = {
