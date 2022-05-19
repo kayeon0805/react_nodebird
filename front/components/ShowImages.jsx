@@ -6,7 +6,7 @@ import { backUrl } from "../config/config";
 const ShowImages = ({ image, postId, removeModifyImagePaths }) => {
     const onDeleteImage = useCallback(async () => {
         await axios
-            .get(`${backUrl}/post/image/${postId}?image=${image}`)
+            .get(`${backUrl}/post/${postId}/image?src=${image}`)
             .then((response) => {
                 if (response) {
                     // 이미 게시글에 추가된 이미지를 삭제할 경우
