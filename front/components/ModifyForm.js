@@ -98,8 +98,8 @@ const ModifyForm = ({ post, setModifyPost }) => {
         <div style={{ marginBottom: 20 }}>
             <WrapperCard>
                 <Slider {...settings}>
-                    {post.Images.length > 0 &&
-                        post.Images.map((v, i) => (
+                    {modifyImagePaths.length > 0 &&
+                        modifyImagePaths.map((v, i) => (
                             <ShowImages
                                 key={v.src}
                                 image={v.src}
