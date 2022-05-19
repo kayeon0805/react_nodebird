@@ -19,11 +19,8 @@ const ShowImages = ({
                         image: image,
                         postId: postId,
                     });
-                    setModifyImagePaths([]);
-                } else {
-                    // 아직 게시글에 추가되지 않은 이미지를 삭제할 경우
-                    removeModifyImagePaths(image);
                 }
+                removeModifyImagePaths(image);
             });
     }, [image, postId]);
 
