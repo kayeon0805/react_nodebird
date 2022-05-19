@@ -47,7 +47,7 @@ const ModifyForm = ({ post, setModifyPost }) => {
             await axios
                 .post(`${backUrl}/post/images`, imageFormData)
                 .then((response) => {
-                    setModifyImagePaths([...modifyImagePaths, response]);
+                    setModifyImagePaths([...modifyImagePaths, response.data]);
                 });
         },
         [modifyImagePaths]
@@ -56,6 +56,7 @@ const ModifyForm = ({ post, setModifyPost }) => {
     const removeModifyImagePaths = useCallback(
         (image) => {
             setModifyImagePaths(modifyImagePaths.filter((v) => v !== image));
+            window.location.reload();
         },
         [modifyImagePaths]
     );
