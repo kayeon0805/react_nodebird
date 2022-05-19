@@ -1,6 +1,6 @@
 import { Button, Card, Form, Input } from "antd";
 import moment from "moment";
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import useInput from "../hooks/useInput";
 import { MODIFY_POST_REQUEST } from "../reducers/post";
@@ -25,7 +25,9 @@ const ModifyForm = ({ post, setModifyPost }) => {
     const imageSrc = useCallback(() => {
         return post.Images.map((v) => v.src);
     }, [post]);
-    const { modifyPostLoading } = useSelector((state) => state.post);
+    const { modifyPostLoading, modifyPostDone } = useSelector(
+        (state) => state.post
+    );
     const [modifyImagePaths, setModifyImagePaths] = useState(imageSrc);
     const [text, onChangeText, setText] = useInput(post.content);
     const dispatch = useDispatch();
@@ -34,6 +36,12 @@ const ModifyForm = ({ post, setModifyPost }) => {
     const onClickImageUpload = useCallback(() => {
         imageInput.current.click();
     }, [imageInput.current]);
+
+    useEffect(() => {
+        if (modifyPostDone) {
+            window.location.reload();
+        }
+    }, [modifyPostDone]);
 
     const onchangeImages = useCallback(
         async (e) => {
@@ -80,7 +88,6 @@ const ModifyForm = ({ post, setModifyPost }) => {
         });
         setText("");
         setModifyPost("");
-        window.location.reload();
     }, [text, post, modifyImagePaths]);
 
     const settings = {
