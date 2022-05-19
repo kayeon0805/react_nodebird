@@ -73,12 +73,10 @@ const ModifyForm = ({ post, setModifyPost }) => {
             formData.append("image", p);
         });
         formData.append("content", text);
+        formData.append("postId", post.id);
         dispatch({
             type: MODIFY_POST_REQUEST,
-            data: {
-                postId: post.id,
-                data: formData,
-            },
+            data: formData,
         });
         setText("");
         setModifyPost("");

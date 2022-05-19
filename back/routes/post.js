@@ -145,11 +145,9 @@ router.post("/:postId/comment", isLoggedIn, async (req, res, next) => {
 
 // 게시글 수정
 router.post("/modify", isLoggedIn, async (req, res, next) => {
-    const { postId } = req.body;
-    const { content } = req.body;
     try {
         const post = await Post.findOne({
-            where: { id: postId },
+            where: { id: req.body.postId },
         });
         if (!post) {
             return res.status(404).send("존재하지 않는 게시글입니다.");
@@ -168,7 +166,9 @@ router.post("/modify", isLoggedIn, async (req, res, next) => {
             await post.removeHashtags(exResult.map((v) => v[0]));
         }
         // 해시태그 추가하기
-        const hashtags = Array.from(new Set(content.match(/#[^\s#]+/g)));
+        const hashtags = Array.from(
+            new Set(req.body.content.match(/#[^\s#]+/g))
+        );
         if (hashtags) {
             // 없을 때는 등록, 있으면 가져옴.
             const result = await Promise.all(
@@ -183,10 +183,10 @@ router.post("/modify", isLoggedIn, async (req, res, next) => {
         }
         await Post.update(
             {
-                content: content,
+                content: req.body.content,
             },
             {
-                where: { id: postId },
+                where: { id: req.body.postId },
             }
         );
         if (req.body.image) {
@@ -204,7 +204,7 @@ router.post("/modify", isLoggedIn, async (req, res, next) => {
             }
         }
         const fullPost = await Post.findOne({
-            where: { id: postId },
+            where: { id: req.body.postId },
             include: [
                 {
                     model: Post,
