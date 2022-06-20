@@ -2,6 +2,7 @@ import { Button, Card, Form, Input } from "antd";
 import moment from "moment";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import Router from "next/router";
 import useInput from "../hooks/useInput";
 import { MODIFY_POST_REQUEST } from "../reducers/post";
 import Slider from "react-slick";
@@ -31,6 +32,7 @@ const ModifyForm = ({ post, setModifyPost }) => {
     const [modifyImagePaths, setModifyImagePaths] = useState(imageSrc);
     const [text, onChangeText, setText] = useInput(post.content);
     const dispatch = useDispatch();
+    const id = useSelector((state) => state.user.me?.id);
     const imageInput = useRef();
 
     const onClickImageUpload = useCallback(() => {
@@ -38,9 +40,15 @@ const ModifyForm = ({ post, setModifyPost }) => {
     }, [imageInput.current]);
 
     useEffect(() => {
+        if (!id) {
+            Router.push("/");
+        }
+    }, [id]);
+
+    useEffect(() => {
         if (modifyPostDone) {
             setModifyPost("");
-            window.location.reload();
+            Router.push("/");
         }
     }, [modifyPostDone]);
 

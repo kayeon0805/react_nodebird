@@ -40,7 +40,7 @@ const PostCard = ({ post }) => {
             type: LIKE_POST_REQUEST,
             data: post.id,
         });
-    }, []);
+    }, [id]);
 
     const onUnLike = useCallback(() => {
         if (!id) {
@@ -50,7 +50,7 @@ const PostCard = ({ post }) => {
             type: UNLIKE_POST_REQUEST,
             data: post.id,
         });
-    }, []);
+    }, [id]);
 
     const onToggleComment = useCallback(() => {
         setCommentFormOpened((prev) => !prev);
@@ -64,7 +64,7 @@ const PostCard = ({ post }) => {
             type: REMOVE_POST_REQUEST,
             data: post.id,
         });
-    }, []);
+    }, [id]);
 
     const onRetweet = useCallback(() => {
         if (!id) {
@@ -76,9 +76,15 @@ const PostCard = ({ post }) => {
         });
     }, [id]);
 
-    const onClickModifyPost = useCallback((post) => {
-        setModifyPost(post);
-    }, []);
+    const onClickModifyPost = useCallback(
+        (post) => {
+            if (!id) {
+                return alert("로그인이 필요합니다.");
+            }
+            setModifyPost(post);
+        },
+        [id]
+    );
 
     if (modifyPost) {
         return <ModifyForm post={modifyPost} setModifyPost={setModifyPost} />;
@@ -206,7 +212,7 @@ const PostCard = ({ post }) => {
                 </Card>
                 {commentFormOpened && (
                     <div>
-                        <CommentForm post={post} />
+                        {id && <CommentForm post={post} />}
                         <List
                             header={`${post.Comments.length}개의 댓글`}
                             itemLayout="horizontal"
