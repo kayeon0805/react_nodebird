@@ -67,6 +67,27 @@ const Signup = () => {
         if (!term) {
             return setTermError(true);
         }
+        const idRegExp =
+            /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+
+        const passwordRegExp =
+            /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+
+        const nicknameRegExp = /^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|]{2,10}$/;
+
+        if (!idRegExp.test(email)) {
+            return alert("아이디는 올바른 이메일 형식으로 입력해주세요");
+        }
+        if (!passwordRegExp.test(password)) {
+            return alert(
+                "비밀번호는 최소 8자, 영문 대소문자, 숫자, 특수문자 포함입니다"
+            );
+        }
+        if (!nicknameRegExp.test(nickname)) {
+            return alert(
+                "닉네임은 한글과 영문 대 소문자, 숫자를 사용하세요. (2~10자리)"
+            );
+        }
         dispatch({
             type: SIGN_UP_REQUEST,
             data: { email, password, nickname },
@@ -88,7 +109,9 @@ const Signup = () => {
                             type="email"
                             value={email}
                             required
+                            placeholder="이메일을 입력해주세요"
                             onChange={onChangeEmail}
+                            autoFocus
                         />
                     </div>
                     <div>
@@ -98,6 +121,7 @@ const Signup = () => {
                             name="user-nickname"
                             value={nickname}
                             required
+                            placeholder="한글과 영문 대 소문자, 숫자를 사용하세요. (2~10자리)"
                             onChange={onChangeNickname}
                         />
                     </div>
@@ -109,6 +133,7 @@ const Signup = () => {
                             type="password"
                             value={password}
                             required
+                            placeholder="최소 8자, 영문 대소문자, 숫자, 특수문자 포함"
                             onChange={onChangePassword}
                         />
                     </div>
@@ -120,6 +145,7 @@ const Signup = () => {
                             type="password"
                             value={passwordCheck}
                             required
+                            placeholder="비밀번호와 동일하게 입력해주세요."
                             onChange={onChangePasswordCheck}
                         />
                         {passwordError && (
