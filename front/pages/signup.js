@@ -73,7 +73,7 @@ const Signup = () => {
         const passwordRegExp =
             /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
 
-        const nicknameRegExp = /^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|]{2,10}$/;
+        const nicknameRegExp = /^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|]{2,20}$/;
 
         if (!idRegExp.test(email)) {
             return alert("아이디는 올바른 이메일 형식으로 입력해주세요");
@@ -85,7 +85,7 @@ const Signup = () => {
         }
         if (!nicknameRegExp.test(nickname)) {
             return alert(
-                "닉네임은 한글과 영문 대 소문자, 숫자를 사용하세요. (2~10자리)"
+                "닉네임은 한글과 영문 대 소문자, 숫자를 사용하세요. (2~20자리)"
             );
         }
         dispatch({
@@ -121,7 +121,7 @@ const Signup = () => {
                             name="user-nickname"
                             value={nickname}
                             required
-                            placeholder="한글과 영문 대 소문자, 숫자를 사용하세요. (2~10자리)"
+                            placeholder="한글과 영문 대 소문자, 숫자를 사용하세요. (2~20자리)"
                             onChange={onChangeNickname}
                         />
                     </div>
