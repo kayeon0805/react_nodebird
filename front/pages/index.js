@@ -63,10 +63,25 @@ const Home = () => {
             )}
             {searchInputDone
                 ? searchPosts.map((post, i) => {
-                      <PostCard key={post.id} post={post} />;
+                      if (i === searchPosts.length - 1) {
+                          return (
+                              <>
+                                  <div
+                                      ref={
+                                          hasMorePosts && !loadPostsLoading
+                                              ? ref
+                                              : undefined
+                                      }
+                                  />
+
+                                  <PostCard key={post.id} post={post} />
+                              </>
+                          );
+                      }
+                      return <PostCard key={post.id} post={post} />;
                   })
                 : mainPosts.map((post, i) => {
-                      if (i === mainPosts.length - 3) {
+                      if (i === mainPosts.length - 1) {
                           return (
                               <>
                                   <div
