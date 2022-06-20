@@ -62,13 +62,26 @@ const Home = () => {
                 <Message>게시글이 존재하지 않습니다.</Message>
             )}
             {searchInputDone
-                ? searchPosts.map((post) => (
-                      <PostCard key={post.id} post={post} />
-                  ))
-                : mainPosts.map((post) => (
-                      <PostCard key={post.id} post={post} />
-                  ))}
-            <div ref={hasMorePosts && !loadPostsLoading ? ref : undefined} />
+                ? searchPosts.map((post, i) => {
+                      <PostCard key={post.id} post={post} />;
+                  })
+                : mainPosts.map((post, i) => {
+                      if (i === mainPosts.length - 3) {
+                          return (
+                              <>
+                                  <div
+                                      ref={
+                                          hasMorePosts && !loadPostsLoading
+                                              ? ref
+                                              : undefined
+                                      }
+                                  />
+
+                                  <PostCard key={post.id} post={post} />
+                              </>
+                          );
+                      }
+                  })}
         </AppLayout>
     );
 };
