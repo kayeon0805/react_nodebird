@@ -105,6 +105,7 @@ function* logIn(action) {
     try {
         // loginAPI를 실행하고 리턴값을 받는다.
         const result = yield call(loginAPI, action.data);
+        console.log(result);
         // put => dispatch 같은 개념
         yield put({
             type: LOG_IN_SUCCESS,
